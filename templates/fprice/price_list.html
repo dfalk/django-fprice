@@ -1,0 +1,22 @@
+{% extends "fprice/base_price.html" %}
+{% load comments markup %}
+
+{% block breadcrumbs %} - Цены{% endblock %}
+
+{% block contentclass %}blog{% endblock %}
+
+{% block content %}
+<!--<h1>Дневник</h1>-->
+<ul id="price-entries">
+    {% for price in object_list %}<li>
+        <a href="{{ product.get_absolute_url }}">{{ price.product }}</a> -  {{ price.price }}
+    </li>
+    {% endfor %}
+</ul><!-- /#price-entries -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}

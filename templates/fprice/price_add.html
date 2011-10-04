@@ -1,0 +1,18 @@
+{% extends "fprice/base_price.html" %}
+
+{% block title %}Новая покупка | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Новая покупка{% endblock %}
+
+{% block contentclass %}price-add{% endblock %}
+{% block content %}
+<h1>Новая покупка</h1>
+
+<form action="" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+</div>
+{% endblock %}
+            

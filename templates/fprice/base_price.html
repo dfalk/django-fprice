@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Цены{% endblock %}
+
+{% block breadcrumbs %} - Дневник{% endblock %}
+
+{% block sidebar %}
+<!--<h2>Меню прайсов</h2>-->
+<ul id="price-sidemenu">
+
+    {% if user.is_staff %}<li id="price-admin"><h3>Администрирование</h3>
+        <ul>
+        <li><a href="{% url price_add %}">Добавить цену</a></li>
+        </ul>
+    </li>{% endif %}
+
+</ul><!-- /price-sidemenu -->
+{% endblock %}
+
