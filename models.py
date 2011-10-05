@@ -36,7 +36,6 @@ UNIT_CHOICES = (
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    unit = models.CharField(max_length=5, choices=UNIT_CHOICES)
     section = models.ForeignKey(Section, null=True, blank=True)
     description = models.TextField(blank=True)
 

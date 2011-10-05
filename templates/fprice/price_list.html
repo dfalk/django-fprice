@@ -6,12 +6,13 @@
 {% block contentclass %}blog{% endblock %}
 
 {% block content %}
-<!--<h1>Дневник</h1>-->
+<h1>Последние покупки</h1>
 <ul id="price-entries">
-    {% for price in object_list %}<li>
-        <a href="{{ product.get_absolute_url }}">{{ price.product }}</a> -  {{ price.price }}
-    </li>
+    <table>
+    {% for price in object_list %}
+        <tr><td style="text-align: right;">{{ price.price }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
     {% endfor %}
+    </table>
 </ul><!-- /#price-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:

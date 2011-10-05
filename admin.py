@@ -9,6 +9,7 @@ class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
     actions = ['make_spy']
     exclude = ('customer','price')
+    list_display = ["product", "amount", "time", "customer"]
 
     def make_spy(self, request, queryset):
         rows_updated = queryset.update(spytrade=True)

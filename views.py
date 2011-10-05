@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.views.generic import list_detail
 from django.views.generic.simple import direct_to_template
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum, Q
 
@@ -33,18 +34,29 @@ def price_add(request, **kwargs):
         form = TradeForm(request.POST)
         if form.is_valid():
             # CHECK EXISTING PRICE OR ADD NEW
-            shop1 = Product.objects.get(title=form.cleaned_data['shop'])
-            product1 = Product.objects.get(title=form.cleaned_data['shop'])
-            price1 = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+            if form.cleaned_data['shop']:
+                shop = Shop.objects.get(id=int(form.cleaned_data['shop']))
+            else:
+                shop = Shop()
+                shop.title = form.cleaned_data['shop_visual']
+                shop.save()
+            if form.cleaned_data['product']:
+                product = Product.objects.get(id=int(form.cleaned_data['product']))
+            else:
+                product = Product()
+                product.title = form.cleaned_data['product_visual']
+                product.unit = form.cleaned_data['product_visual']
+                product.save()
+            price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
 
             # SAVE RESULT
-            #new_trade = form.save(commit=False)
-            #new_trade.customer = request.user
-            #new_trade.shop = shop1
-            #new_trade.product = product1
-            #new_trade.price = price1
-            #new_trade.save()
-            #form.save_m2m()
+            new_trade = form.save(commit=False)
+            new_trade.customer = request.user
+            new_trade.shop = shop
+            new_trade.product = product
+            new_trade.price = price
+            new_trade.save()
+            form.save_m2m()
 
             return HttpResponseRedirect(reverse('price_index'))
     else:

@@ -22,7 +22,7 @@
 
 <script>
 $(document).ready(function(){
-    $( "#id_shop" ).autocomplete({
+    $( "#id_shop_visual" ).autocomplete({
         //Определяем обратный вызов к результатам форматирования
 		source: function(req, add){
 
@@ -48,6 +48,7 @@ $(document).ready(function(){
 					title: "Remove " + shop
 				}).text("x").appendTo(span);
 
+            $("#id_shop").attr("value", ui.item.id); 
 			//Добавляем после поля 
 			//span.insertAfter("#id_shop");
 		},
@@ -60,7 +61,7 @@ $(document).ready(function(){
 		minLength: 1,
     });
 
-    $( "#id_product" ).autocomplete({
+    $( "#id_product_visual" ).autocomplete({
         //Определяем обратный вызов к результатам форматирования
 		source: function(req, add){
 
@@ -86,6 +87,7 @@ $(document).ready(function(){
 					title: "Remove " + shop
 				}).text("x").appendTo(span);
 
+            $("#id_product").attr("value", ui.item.id); 
 			//Добавляем после поля
 			//span.insertAfter("#id_shop");
 		},
