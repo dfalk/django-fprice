@@ -5,7 +5,7 @@ from fprice.models import Section, Product, Trade, Shop
 from fprice.forms import TradeForm
 from django.contrib import admin
 
-class TradeAdmin(AutocompleteAdmin, admin.ModelAdmin):
+class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
     actions = ['make_spy']
     exclude = ('customer','price')
