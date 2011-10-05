@@ -38,7 +38,7 @@ class Product(models.Model):
     title = models.CharField(max_length=200)
     unit = models.CharField(max_length=5, choices=UNIT_CHOICES)
     section = models.ForeignKey(Section, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True)
 
     def __unicode__(self):
         return u"%s" % (self.title)
@@ -53,6 +53,7 @@ CURR_CHOICES = (
     ('eur','eur'),
 )
 
+"""
 class Price(models.Model):
     user = models.ForeignKey(User)
     shop = models.ForeignKey(Shop)
@@ -65,21 +66,24 @@ class Price(models.Model):
     currency = models.CharField(max_length=3,choices=CURR_CHOICES)
 
     def __unicode__(self):
-        return u"%s %s" % (self.product, self.price)
+        return u"%s %s (%s)" % (self.product, self.price, self.shop)
 
     class Meta:
         ordering = ["-time"]
+"""
 
 
 class Trade(models.Model):
     customer = models.ForeignKey(User)
-    shop = models.ForeignKey(Shop)
-    product = models.ForeignKey(Product)
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
     time_added = models.DateTimeField(default=datetime.now,editable=False)
+    #price = models.ForeignKey(Price)
+    shop = models.ForeignKey(Shop)
+    product = models.ForeignKey(Product)
     amount = models.FloatField()
-    price = models.ForeignKey(Price)
+    price = models.DecimalField(max_digits=19, decimal_places=2)
     cost = models.DecimalField(max_digits=12, decimal_places=2)
+    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
     spytrade = models.BooleanField(default=False)
 
     def __unicode__(self):

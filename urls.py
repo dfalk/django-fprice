@@ -9,6 +9,7 @@ urlpatterns = patterns('fprice.views',
     url(r'^$', view='price_list', name='price_index'),
 
     url(r'^add/$', view='price_add', name='price_add'),
+    url(r'^lookup/(shop|product)/$', view='lookup', name='json_lookup'),
 
 )
 

@@ -8,11 +8,11 @@
 <!--<h2>Меню прайсов</h2>-->
 <ul id="price-sidemenu">
 
-    {% if user.is_staff %}<li id="price-admin"><h3>Администрирование</h3>
+    <li id="price-admin"><h3>Личный кабинет</h3>
         <ul>
-        <li><a href="{% url price_add %}">Добавить цену</a></li>
+        <li><a href="{% url price_add %}">Добавить покупку</a></li>
         </ul>
-    </li>{% endif %}
+    </li>
 
 </ul><!-- /price-sidemenu -->
 {% endblock %}
