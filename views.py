@@ -28,38 +28,39 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
 @login_required
 def price_add(request, **kwargs):
     if request.method == 'POST':
-        form = TradeForm(request.POST)
-        if form.is_valid():
-            # CHECK EXISTING SHOP/PRODUCT OR ADD NEW
-            if form.cleaned_data['shop']:
-                shop = Shop.objects.get(id=int(form.cleaned_data['shop']))
-            else:
-                shop = Shop()
-                shop.title = form.cleaned_data['shop_visual']
-                shop.save()
-            if form.cleaned_data['product']:
-                product = Product.objects.get(id=int(form.cleaned_data['product']))
-            else:
-                product = Product()
-                product.title = form.cleaned_data['product_visual']
-                product.unit = form.cleaned_data['product_visual']
-                product.save()
-            price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+        formset = TradeFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset.forms:
+                # CHECK EXISTING SHOP/PRODUCT OR ADD NEW
+                if form.cleaned_data['shop']:
+                    shop = Shop.objects.get(id=int(form.cleaned_data['shop']))
+                else:
+                    shop = Shop()
+                    shop.title = form.cleaned_data['shop_visual']
+                    shop.save()
+                if form.cleaned_data['product']:
+                    product = Product.objects.get(id=int(form.cleaned_data['product']))
+                else:
+                    product = Product()
+                    product.title = form.cleaned_data['product_visual']
+                    product.unit = form.cleaned_data['product_visual']
+                    product.save()
+                price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
 
-            # SAVE RESULT
-            new_trade = form.save(commit=False)
-            new_trade.customer = request.user
-            new_trade.shop = shop
-            new_trade.product = product
-            new_trade.price = price
-            new_trade.save()
-            form.save_m2m()
+                # SAVE RESULT
+                new_trade = form.save(commit=False)
+                new_trade.customer = request.user
+                new_trade.shop = shop
+                new_trade.product = product
+                new_trade.price = price
+                new_trade.save()
+                form.save_m2m()
 
             return HttpResponseRedirect(reverse('price_index'))
     else:
-        form = TradeForm()
+        formset = TradeFormSet()
 
-    return direct_to_template(request, 'fprice/price_add.html',{'form':form})
+    return direct_to_template(request, 'fprice/price_add.html',{'formset':formset})
 
 
 def lookup(request, what):

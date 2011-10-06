@@ -16,7 +16,13 @@
 <h1>Новая покупка</h1>
 
 <form action="" method="post">{% csrf_token %}
-{{ form.as_p }}
+    {{ formset.management_form }}
+    <table>
+        {% for form in formset.forms %}
+        {{ form }}
+        <tr><td><hr></td></tr>
+        {% endfor %}
+    </table>
 <input type="submit" value="Submit" />
 </form>
 
