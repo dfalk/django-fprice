@@ -10,7 +10,6 @@ class TradeForm(forms.ModelForm):
     product_visual = forms.CharField(max_length=200, label="Product")
     shop = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
     product = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
-    unit = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
 
     class Meta:
         model = Trade
