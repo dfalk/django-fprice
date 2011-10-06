@@ -20,7 +20,7 @@ class TitleForm(forms.ModelForm):
         self.fields['shop_visual'].widget.attrs['size'] = 50
 
 class TradeForm(forms.ModelForm):
-    product_visual = forms.CharField(max_length=200, label="Product")
+    product_visual = forms.CharField(max_length=200, label="Product", required=True)
     product = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
 
     class Meta:

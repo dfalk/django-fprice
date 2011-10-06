@@ -21,6 +21,7 @@ th { text-align: left; }
 <h1>Новая покупка</h1>
 
 <form action="" method="post">{% csrf_token %}
+    {{ forma.shop }}
     <table id="titleform">
         <thead>
             <tr>
@@ -37,6 +38,12 @@ th { text-align: left; }
                 <td>{{ forma.currency }} </td>
                 <td>{{ forma.spytrade }}</td>
              </tr>
+            <tr>
+                <td>{{ forma.shop_visual.errors }}</td>
+                <td>{{ forma.time.errors }}</td>
+                <td>{{ forma.currency.errors }} </td>
+                <td>{{ forma.spytrade.errors }}</td>
+             </tr>
         </tbody>
     </table>
     <hr />
@@ -51,14 +58,15 @@ th { text-align: left; }
         <tbody>
         {% for form in formset.forms %}
             <tr id="{{ form.prefix }}-row">
-                <td>{{ form.product_visual }}</td>
-                <td>{{ form.amount }}</td>
-                <td>{{ form.cost }}</td>
+                <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
+                <td>{{ form.amount.errors }}{{ form.amount }}</td>
+                <td>{{ form.cost.errors }}{{ form.cost }}</td>
              </tr>
         {% endfor %}
         </tbody>
     </table>
     {{ formset.management_form }}
+    <br />
     <input type="submit" value="Submit" />
 </form>
 
@@ -139,7 +147,7 @@ $(document).ready(function(){
 					    title: "Remove " + shop
 				    }).text("x").appendTo(span);
 
-                $(this).attr("value", ui.item.id); 
+                $(this).next().attr("value", ui.item.id); 
 			    //Добавляем после поля
 			    //span.insertAfter("#id_shop");
 		    },

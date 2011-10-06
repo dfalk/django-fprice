@@ -30,32 +30,37 @@ def price_add(request, **kwargs):
     if request.method == 'POST':
         forma = TitleForm(request.POST)
         formset = TradeFormSet(request.POST)
-        if formset.is_valid() and forma.is_valid():
-            for form in formset.forms:
-                # CHECK EXISTING SHOP/PRODUCT OR ADD NEW
-                if form.cleaned_data['shop']:
-                    shop = Shop.objects.get(id=int(form.cleaned_data['shop']))
-                else:
-                    shop = Shop()
-                    shop.title = form.cleaned_data['shop_visual']
-                    shop.save()
-                if form.cleaned_data['product']:
-                    product = Product.objects.get(id=int(form.cleaned_data['product']))
-                else:
-                    product = Product()
-                    product.title = form.cleaned_data['product_visual']
-                    product.unit = form.cleaned_data['product_visual']
-                    product.save()
-                price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+        if forma.is_valid() and formset.is_valid():
 
-                # SAVE RESULT
-                new_trade = form.save(commit=False)
-                new_trade.customer = request.user
-                new_trade.shop = shop
-                new_trade.product = product
-                new_trade.price = price
-                new_trade.save()
-                form.save_m2m()
+            # CHECK EXISTING SHOP OR ADD NEW
+            if forma.cleaned_data['shop']:
+                shop = Shop.objects.get(id=int(forma.cleaned_data['shop']))
+            else:
+                shop = Shop()
+                shop.title = forma.cleaned_data['shop_visual']
+                shop.save()
+
+            for form in formset.forms:
+                print form.cleaned_data
+                # PRODUCT
+                if form.has_changed():
+                    if form.cleaned_data['product']:
+                        product = Product.objects.get(id=int(form.cleaned_data['product']))
+                    else:
+                        product = Product()
+                        product.title = form.cleaned_data['product_visual']
+                        product.save()
+                    price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+
+                    # SAVE RESULT
+                    new_trade = form.save(commit=False)
+                    new_trade.customer = request.user
+                    #new_trade.time = ?TIME FROM FORM
+                    new_trade.shop = shop
+                    new_trade.product = product
+                    new_trade.price = price
+                    new_trade.save()
+                    form.save_m2m()
 
             return HttpResponseRedirect(reverse('price_index'))
     else:
