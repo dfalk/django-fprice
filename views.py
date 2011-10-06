@@ -13,7 +13,7 @@ import datetime, time
 from decimal import Decimal
 
 from fprice.models import Section, Product, Shop, Trade
-from fprice.forms import TradeForm, TradeFormSet
+from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
 def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
@@ -28,8 +28,9 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
 @login_required
 def price_add(request, **kwargs):
     if request.method == 'POST':
+        forma = TitleForm(request.POST)
         formset = TradeFormSet(request.POST)
-        if formset.is_valid():
+        if formset.is_valid() and forma.is_valid():
             for form in formset.forms:
                 # CHECK EXISTING SHOP/PRODUCT OR ADD NEW
                 if form.cleaned_data['shop']:
@@ -58,9 +59,10 @@ def price_add(request, **kwargs):
 
             return HttpResponseRedirect(reverse('price_index'))
     else:
+        forma = TitleForm()
         formset = TradeFormSet()
 
-    return direct_to_template(request, 'fprice/price_add.html',{'formset':formset})
+    return direct_to_template(request, 'fprice/price_add.html',{'formset':formset, 'forma':forma})
 
 
 def lookup(request, what):

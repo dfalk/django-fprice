@@ -7,6 +7,11 @@
 <link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.formset.min.js"></script>
+
+<style>
+th { text-align: left; }
+</style>
 {% endblock %}
 
 {% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Новая покупка{% endblock %}
@@ -16,19 +21,59 @@
 <h1>Новая покупка</h1>
 
 <form action="" method="post">{% csrf_token %}
-    {{ formset.management_form }}
-    <table>
-        {% for form in formset.forms %}
-        {{ form }}
-        <tr><td><hr></td></tr>
-        {% endfor %}
+    <table id="titleform">
+        <thead>
+            <tr>
+                <th scope="col">{{ forma.shop_visual.label }}</th>
+                <th scope="col">{{ forma.time.label }}</th>
+                <th scope="col">{{ forma.currency.label }}</th>
+                <th scope="col">Spy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ forma.shop_visual }}</td>
+                <td>{{ forma.time }}</td>
+                <td>{{ forma.currency }} </td>
+                <td>{{ forma.spytrade }}</td>
+             </tr>
+        </tbody>
     </table>
-<input type="submit" value="Submit" />
+    <hr />
+    <table id="tradeform">
+        <thead>
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for form in formset.forms %}
+            <tr id="{{ form.prefix }}-row">
+                <td>{{ form.product_visual }}</td>
+                <td>{{ form.amount }}</td>
+                <td>{{ form.cost }}</td>
+             </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ formset.management_form }}
+    <input type="submit" value="Submit" />
 </form>
 
 <script>
 $(document).ready(function(){
-    $( "#id_shop_visual" ).autocomplete({
+    $("#tradeform tbody tr").formset({
+        added: function(row) {
+            row.find('td:first input').addClass("ac");
+            setAc();
+        }
+    });
+
+    $("#tradeform tbody tr td:first input").addClass("ac");
+
+    $("#id_shop_visual").autocomplete({
         //Определяем обратный вызов к результатам форматирования
 		source: function(req, add){
 
@@ -67,44 +112,47 @@ $(document).ready(function(){
 		minLength: 1,
     });
 
-    $( "#id_product_visual" ).autocomplete({
-        //Определяем обратный вызов к результатам форматирования
-		source: function(req, add){
+    function setAc(){
+        $( ".ac" ).autocomplete({
+            //Определяем обратный вызов к результатам форматирования
+		    source: function(req, add){
 
-			//Передаём запрос на сервер
-			$.getJSON("{% url json_lookup 'product' %}", req, function(data) {
-				//Создаем массив для объектов ответа
-				var suggestions = [];
-				//Обрабатываем ответ
-				$.each(data, function(i, val){
-					suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
-				});
-				//Передаем массив обратному вызову
-				add(suggestions);
-			});
-		},
-		//Определяем обработчик селектора
-		select: function(e, ui) {
-			//Создаем форматированную переменную shop
-			var shop = ui.item.id,
-				span = $("<span>").text(shop),
-				a = $("<a>").addClass("remove").attr({
-					href: "javascript:",
-					title: "Remove " + shop
-				}).text("x").appendTo(span);
+			    //Передаём запрос на сервер
+			    $.getJSON("{% url json_lookup 'product' %}", req, function(data) {
+				    //Создаем массив для объектов ответа
+				    var suggestions = [];
+				    //Обрабатываем ответ
+				    $.each(data, function(i, val){
+					    suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
+				    });
+				    //Передаем массив обратному вызову
+				    add(suggestions);
+			    });
+		    },
+		    //Определяем обработчик селектора
+		    select: function(e, ui) {
+			    //Создаем форматированную переменную shop
+			    var shop = ui.item.id,
+				    span = $("<span>").text(shop),
+				    a = $("<a>").addClass("remove").attr({
+					    href: "javascript:",
+					    title: "Remove " + shop
+				    }).text("x").appendTo(span);
 
-            $("#id_product").attr("value", ui.item.id); 
-			//Добавляем после поля
-			//span.insertAfter("#id_shop");
-		},
+                $(this).attr("value", ui.item.id); 
+			    //Добавляем после поля
+			    //span.insertAfter("#id_shop");
+		    },
 
-		//Определяем обработчик выбора
-		change: function(event,ui){
-			//Сохраняем поле 'Кому' без изменений и в правильной позиции
-			//$("#id_shop").val("").css("top", 2);
-		},
-		minLength: 1,
-    });
+		    //Определяем обработчик выбора
+		    change: function(event,ui){
+			    //Сохраняем поле 'Кому' без изменений и в правильной позиции
+			    //$("#id_shop").val("").css("top", 2);
+		    },
+		    minLength: 1,
+        });
+    };
+    setAc();
 
 });
 </script>
