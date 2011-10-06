@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from fprice.models import Section, Product, Shop, Trade
-from fprice.forms import TradeForm
-
-from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-
 from django.views.generic import list_detail
 from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
@@ -14,9 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum, Q
 
 from django.core import serializers
-import simplejson
 import datetime, time
 from decimal import Decimal
+
+from fprice.models import Section, Product, Shop, Trade
+from fprice.forms import TradeForm, TradeFormSet
 
 
 def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
@@ -33,7 +30,7 @@ def price_add(request, **kwargs):
     if request.method == 'POST':
         form = TradeForm(request.POST)
         if form.is_valid():
-            # CHECK EXISTING PRICE OR ADD NEW
+            # CHECK EXISTING SHOP/PRODUCT OR ADD NEW
             if form.cleaned_data['shop']:
                 shop = Shop.objects.get(id=int(form.cleaned_data['shop']))
             else:

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django import forms
 from django.db import models
+from django import forms
+from django.forms.formsets import formset_factory
 from fprice.models import Trade, Shop
 
 class TradeForm(forms.ModelForm):
@@ -20,3 +21,5 @@ class TradeForm(forms.ModelForm):
         super(TradeForm, self).__init__(*args, **kwargs)
         self.fields['shop_visual'].widget.attrs['size'] = 50
         self.fields['product_visual'].widget.attrs['size'] = 50
+
+TradeFormSet = formset_factory(TradeForm, extra=2)

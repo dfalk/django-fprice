@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django.contrib import admin
 from fprice.models import Section, Product, Trade, Shop
 from fprice.forms import TradeForm
-from django.contrib import admin
 
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
