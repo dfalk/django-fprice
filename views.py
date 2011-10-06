@@ -41,7 +41,6 @@ def price_add(request, **kwargs):
                 shop.save()
 
             for form in formset.forms:
-                print form.cleaned_data
                 # PRODUCT
                 if form.has_changed():
                     if form.cleaned_data['product']:
