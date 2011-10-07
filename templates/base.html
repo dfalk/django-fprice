@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+
+<title>{% block title %}Site title{% endblock %}</title>
+
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="description" content="{% block description %}{% endblock %}"/>
+<meta name="keywords" content="{% block keywords %}{% endblock %}" />
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+{% endblock %}
+
+</head>
+<body>
+
+<div id="header">
+{% block header %}
+<div id="sitetitle">Интересный сайт</div>
+<div id="sitemenu">
+    <a href="/">О нас</a>
+    <a href="/blog/">Дневник</a>
+    <a href="/price/">Цены</a>
+</div>
+{% endblock %}
+</div><!-- /#header -->
+
+<div id="navline" class="infobar rounded" >
+    <div id="profile">
+        <a href="/blog/">Дневник</a>
+        <a href="/price/">Цены</a>
+        {% if not user.is_authenticated %}<a href="{% url auth_login %}?next={{ request.path }}">Войти</a>{% endif %}
+        {% if user.is_staff %}<a href="{% url admin:index %}">Админка</a>{% endif %}
+        {% if user.is_authenticated %}<a href="{% url auth_logout %}?next={{ request.path }}">Выход</a> ({{ user.username }}){% endif %}
+    </div>
+    <div id="breadcrumbs"><a href="/">Главная</a>{% block breadcrumbs %} - Добро пожаловать!{% endblock %}</div>
+    <div class="clearfix"></div>
+</div><!-- /#infobar personal -->
+
+<div id="main">
+{% block main %}
+
+<div id="content" class="{% block contentclass %}{% endblock %} rounded">
+{% block content %}{% endblock %}
+</div><!-- /#content -->
+
+<div id="sidebar" class="rounded">
+{% block sidebar %}{% endblock %}
+</div><!-- /#sidebar -->
+
+{% endblock %}
+<div class="clearfix"></div>
+</div><!-- /#main div -->
+
+<div id="footer" class="infobar rounded">
+{% block footer %}Site copyright{% endblock %}
+</div><!-- /#infobar footer -->
+
+</body>
+</html>
