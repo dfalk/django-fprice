@@ -6,11 +6,11 @@
 {% block contentclass %}blog{% endblock %}
 
 {% block content %}
-<h1>Последние покупки</h1>
+<h1>Последние цены</h1>
 <ul id="price-entries">
     <table>
     {% for price in object_list %}
-        <tr><td style="text-align: right;">{{ price.price }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
+        <tr><td style="width: 50px;">{{ price.time|date:"d M" }}</td><td style="text-align: right;">{{ price.price }}</td><td style="width: 30px;">{{ price.get_currency_display }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
     {% endfor %}
     </table>
 </ul><!-- /#price-entries -->
