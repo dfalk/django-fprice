@@ -1,0 +1,167 @@
+body {
+    font-family: Ubuntu, Verdana, sans-serif;
+    font-size: 11px;
+    background: #ccc;
+    color: #555;
+    margin: 0px auto;
+    width: 960px;
+}
+
+/* ========================= LAYOUT ========================== */
+
+.clearfix {
+    clear: both;
+}
+
+.rounded {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#header {
+    margin: 10px auto 5px;
+}
+
+#sitetitle {
+    font-size: 300%;
+}
+
+#sitemenu {
+    font-size: 150%;
+}
+
+.infobar {
+    background: #bbb;
+    margin: 4px 0;
+    padding: 3px;
+}
+
+#breadcrumbs {
+    float: left;
+}
+
+#profile {
+    float: right;
+}
+
+#main {
+    background: #ccc;
+}
+
+#content {
+    background: #ddd;
+    width: 704px;
+    float: left;
+    padding: 10px;
+}
+
+#sidebar {
+    background: #ddd;
+    width: 212px;
+    float: right;
+    margin-left: 4px;
+    padding: 10px;
+}
+
+/* =========================== DEFAULT ========================== */
+
+a, a:active, a:visited {
+    color: #a52919;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 175%;
+    color: #a52919;
+    margin: 2px 0 10px 0;
+    padding: 0;
+}
+h2 {
+    font-size: 150%;
+    color: #773333;
+    margin: 3px 0;
+    padding: 0;
+}
+h3 {
+    font-size: 125%;
+    color: #555555;
+    margin: 2px 0;
+    padding: 0;
+}
+
+h4 {
+    font-size: 115%;
+    color: #555555;
+    margin: 2px 0;
+    padding: 0;
+}
+
+h5 {
+    font-size: 100%;
+    color: #555555;
+    margin: 2px 0;
+    padding: 0;
+}
+
+/* =========================== SIDEBAR ========================== */
+
+#sidebar h2 {
+    margin-bottom: 10px;
+}
+
+#sidebar > ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+#sidebar ul li ul {
+    list-style-type: disc;
+    margin-bottom: 6px;
+    padding-left: 15px;
+}
+
+/* ============================ BLOG =========================== */
+
+#id_comment {
+    width: 98%;
+    height: 60px;
+}
+
+#blog-entries {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+#blog-entries li {
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+#related-entries ul {
+    list-style-type: disc;
+    margin-top: 0px;
+    margin-bottom: 6px;
+    padding-left: 15px;
+}
+
+.entry-excerpt {
+    margin-bottom: -8px;
+}
+
+#entry-content, #comment-form {
+    margin-top: 10px;
+}
+
+#related-entries, #entry-comments {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 1px solid #aaa;
+}
