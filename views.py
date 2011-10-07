@@ -33,19 +33,25 @@ def price_add(request, **kwargs):
         if forma.is_valid() and formset.is_valid():
 
             # CHECK EXISTING SHOP OR ADD NEW
+            shop = None
             if forma.cleaned_data['shop']:
                 shop = Shop.objects.get(id=int(forma.cleaned_data['shop']))
-            else:
+                if shop.title != form.cleaned_data['shop_visual']:
+                    shop = None
+            if shop == None:
                 shop = Shop()
                 shop.title = forma.cleaned_data['shop_visual']
                 shop.save()
 
             for form in formset.forms:
-                # PRODUCT
+                # CHECK EXISTING PRODUCT
                 if form.has_changed():
+                    product = None
                     if form.cleaned_data['product']:
                         product = Product.objects.get(id=int(form.cleaned_data['product']))
-                    else:
+                        if product.title != form.cleaned_data['product_visual']:
+                            product = None
+                    if product == None:
                         product = Product()
                         product.title = form.cleaned_data['product_visual']
                         product.save()
