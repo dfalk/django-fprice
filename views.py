@@ -36,7 +36,7 @@ def price_add(request, **kwargs):
             shop = None
             if forma.cleaned_data['shop']:
                 shop = Shop.objects.get(id=int(forma.cleaned_data['shop']))
-                if shop.title != form.cleaned_data['shop_visual']:
+                if shop.title != forma.cleaned_data['shop_visual']:
                     shop = None
             if shop == None:
                 shop = Shop()
