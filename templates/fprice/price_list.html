@@ -3,17 +3,17 @@
 
 {% block breadcrumbs %} - Цены{% endblock %}
 
-{% block contentclass %}blog{% endblock %}
+{% block contentclass %}price{% endblock %}
 
 {% block content %}
 <h1>Последние цены</h1>
-<ul id="price-entries">
+<div id="price-entries">
     <table>
     {% for price in object_list %}
-        <tr><td style="width: 50px;"><i>{{ price.time|date:"j b" }}</i></td><td style="text-align: right;">{{ price.price }}</td><td style="width: 30px;">{{ price.get_currency_display }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
+        <tr><td><i>{{ price.time|date:"j b" }}</i></td><td style="text-align: right; padding-right: 0px;">{{ price.price }}</td><td>{{ price.get_currency_display }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
     {% endfor %}
     </table>
-</ul><!-- /#price-entries -->
+</div><!-- /#price-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:
     {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
