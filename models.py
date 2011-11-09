@@ -87,9 +87,6 @@ class Trade(models.Model):
     amount = models.FloatField()
     cost = models.DecimalField(max_digits=12, decimal_places=2)
 
-    # TODO delete this field, make just price instance
-    spytrade = models.BooleanField(default=False)
-
     def __unicode__(self):
         return u"%s - %s" % (self.price.product, self.amount)
 

@@ -10,7 +10,7 @@
 <div id="price-entries">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.price.time|date:"j b" }}</i></td><td style="text-align: right; padding-right: 0px;">{{ item.price.price }}</td><td>{{ item.price.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.price.product }}</a></td></tr>
+        <tr><td><i>{{ item.time|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#price-entries -->

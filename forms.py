@@ -10,7 +10,8 @@ import datetime
 class TitleForm(forms.ModelForm):
     shop_visual = forms.CharField(max_length=200, label="Shop")
     shop = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
-    currency = forms.ChoiceField(choices=CURR_CHOICES)
+    currency = forms.ChoiceField(choices=CURR_CHOICES, initial='rur')
+    spytrade = forms.BooleanField(initial=False) # if true it makes only price instance without trade
 
     class Meta:
         model = Trade

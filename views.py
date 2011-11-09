@@ -19,7 +19,7 @@ from fprice.forms import TradeForm, TradeFormSet, TitleForm
 def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
     return list_detail.object_list(
         request,
-        queryset = Trade.objects.all(),
+        queryset = Price.objects.all(),
         paginate_by = 30,
         page = page,
         template_name = template_name,
@@ -44,7 +44,7 @@ def price_add(request, **kwargs):
                 shop.save()
 
             for form in formset.forms:
-                # check existing product
+
                 if form.has_changed():
 
                     # check existing product or add new
@@ -75,14 +75,15 @@ def price_add(request, **kwargs):
                     new_price.save()
 
                     # save trade if it is not spy
-                    new_trade = form.save(commit=False)
-                    new_trade.customer = request.user
-                    #new_trade.time = TODO time from form
-                    new_trade.shop = shop
-                    new_trade.product = product
-                    new_trade.price = new_price
-                    new_trade.save()
-                    form.save_m2m()
+                    if not forma.cleaned_data['spytrade']:
+                        new_trade = form.save(commit=False)
+                        new_trade.customer = request.user
+                        #new_trade.time = TODO time from form
+                        new_trade.shop = shop
+                        new_trade.product = product
+                        new_trade.price = new_price
+                        new_trade.save()
+                        form.save_m2m()
 
             return HttpResponseRedirect(reverse('price_index'))
     else:
