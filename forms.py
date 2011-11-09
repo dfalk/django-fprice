@@ -13,7 +13,8 @@ class TitleForm(forms.ModelForm):
 
     class Meta:
         model = Trade
-        fields = ('spytrade', 'time', 'shop_visual', 'currency')
+        # TODO currency field
+        fields = ('spytrade', 'time', 'shop_visual')
 
     def __init__(self, *args, **kwargs):
         super(TitleForm, self).__init__(*args, **kwargs)

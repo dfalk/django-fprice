@@ -52,41 +52,50 @@ CURR_CHOICES = (
     ('eur','eur'),
 )
 
-"""
 class Price(models.Model):
+    user_first = models.ForeignKey(User, related_name="user_first")
     user = models.ForeignKey(User)
-    shop = models.ForeignKey(Shop)
-    product = models.ForeignKey(Product)
     time_added = models.DateTimeField(default=datetime.now,editable=False) #auto
     time_first = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
-    count_up = models.IntegerField(default=0)
+    confirm_counter = models.IntegerField(default=0)
+
+    shop = models.ForeignKey(Shop)
+    product = models.ForeignKey(Product)
     price = models.DecimalField(max_digits=19, decimal_places=2)
-    currency = models.CharField(max_length=3,choices=CURR_CHOICES)
+    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
 
     def __unicode__(self):
-        return u"%s %s (%s)" % (self.product, self.price, self.shop)
+        return u"%s - %s %s (%s)" % (self.product, self.price, self.currency, self.shop)
 
     class Meta:
         ordering = ["-time"]
-"""
 
 
 class Trade(models.Model):
     customer = models.ForeignKey(User)
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
     time_added = models.DateTimeField(default=datetime.now,editable=False)
-    #price = models.ForeignKey(Price)
-    shop = models.ForeignKey(Shop)
-    product = models.ForeignKey(Product)
+
+    # FIXME clear code, it has moved to price model
+    price = models.ForeignKey(Price)
+    #shop = models.ForeignKey(Shop)
+    #product = models.ForeignKey(Product)
+    #price = models.DecimalField(max_digits=19, decimal_places=2)
+    #currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+
     amount = models.FloatField()
-    price = models.DecimalField(max_digits=19, decimal_places=2)
     cost = models.DecimalField(max_digits=12, decimal_places=2)
-    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+
+    # TODO delete this field, make just price instance
     spytrade = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return u"%s %s" % (self.product, self.amount)
+        return u"%s - %s" % (self.price.product, self.amount)
+
+    def get_price(self):
+        return u"%s %s" % (self.price.price, self.price.currency)
+    get_price.short_description = "Price"
 
     class Meta:
         ordering = ["-time"]

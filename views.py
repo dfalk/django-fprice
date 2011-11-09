@@ -12,7 +12,7 @@ from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
-from fprice.models import Section, Product, Shop, Trade
+from fprice.models import Section, Product, Shop, Trade, Price
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
@@ -32,7 +32,7 @@ def price_add(request, **kwargs):
         formset = TradeFormSet(request.POST)
         if forma.is_valid() and formset.is_valid():
 
-            # CHECK EXISTING SHOP OR ADD NEW
+            # check existing shop or add new
             shop = None
             if forma.cleaned_data['shop']:
                 shop = Shop.objects.get(id=int(forma.cleaned_data['shop']))
@@ -44,8 +44,10 @@ def price_add(request, **kwargs):
                 shop.save()
 
             for form in formset.forms:
-                # CHECK EXISTING PRODUCT
+                # check existing product
                 if form.has_changed():
+
+                    # check existing product or add new
                     product = None
                     if form.cleaned_data['product']:
                         product = Product.objects.get(id=int(form.cleaned_data['product']))
@@ -55,15 +57,30 @@ def price_add(request, **kwargs):
                         product = Product()
                         product.title = form.cleaned_data['product_visual']
                         product.save()
+
+                    # count price
                     price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
 
-                    # SAVE RESULT
+                    # save price
+                    # TODO check existing price and update it
+                    new_price = Price()
+                    new_price.user = request.user
+                    new_price.user_first = request.user
+                    new_price.time = forma.cleaned_data['time']
+                    new_price.time_first = forma.cleaned_data['time']
+                    new_price.shop = shop
+                    new_price.product = product
+                    new_price.price = price
+                    #new_price.currency = forma.cleaned_data['currency']
+                    new_price.save()
+
+                    # save trade if it is not spy
                     new_trade = form.save(commit=False)
                     new_trade.customer = request.user
-                    #new_trade.time = ?TIME FROM FORM
+                    #new_trade.time = TODO time from form
                     new_trade.shop = shop
                     new_trade.product = product
-                    new_trade.price = price
+                    new_trade.price = new_price
                     new_trade.save()
                     form.save_m2m()
 

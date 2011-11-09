@@ -9,8 +9,8 @@
 <h1>Последние цены</h1>
 <div id="price-entries">
     <table>
-    {% for price in object_list %}
-        <tr><td><i>{{ price.time|date:"j b" }}</i></td><td style="text-align: right; padding-right: 0px;">{{ price.price }}</td><td>{{ price.get_currency_display }}</td><td><a href="{{ product.get_absolute_url }}">{{ price.product }}</a></td></tr>
+    {% for item in object_list %}
+        <tr><td><i>{{ item.price.time|date:"j b" }}</i></td><td style="text-align: right; padding-right: 0px;">{{ item.price.price }}</td><td>{{ item.price.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.price.product }}</a></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#price-entries -->
