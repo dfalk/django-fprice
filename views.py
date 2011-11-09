@@ -6,6 +6,7 @@ from django.views.generic import list_detail
 from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Q
 
 from django.core import serializers
@@ -25,6 +26,7 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
         template_name = template_name,
         **kwargs)
 
+@staff_member_required
 def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(
         request,
