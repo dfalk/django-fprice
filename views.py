@@ -76,9 +76,9 @@ def price_add(request, **kwargs):
                     # TODO check existing price and update it
                     new_price = Price()
                     new_price.user = request.user
-                    new_price.user_first = request.user
+                    new_price.last_user_update = request.user
                     new_price.time = forma.cleaned_data['time']
-                    new_price.time_first = forma.cleaned_data['time']
+                    new_price.last_time_update = forma.cleaned_data['time']
                     new_price.shop = shop
                     new_price.product = product
                     new_price.price = price
@@ -89,7 +89,7 @@ def price_add(request, **kwargs):
                     if not forma.cleaned_data['spytrade']:
                         new_trade = form.save(commit=False)
                         new_trade.customer = request.user
-                        #new_trade.time = TODO time from form
+                        new_trade.time = forma.cleaned_data['time']
                         new_trade.shop = shop
                         new_trade.product = product
                         new_trade.price = new_price

@@ -29,8 +29,8 @@ class TradeAdmin(admin.ModelAdmin):
 
 class PriceAdmin(admin.ModelAdmin):
     #form = TradeForm
-    exclude = ('user','user_first','time','time_first', 'confirm_counter',)
-    list_display = ['__unicode__', 'time', 'user']
+    exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
+    list_display = ['__unicode__', 'last_time_update', 'last_user_update']
 
     def save_model(self, request, obj, form, change):
         if not change:

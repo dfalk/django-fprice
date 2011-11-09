@@ -53,12 +53,13 @@ CURR_CHOICES = (
 )
 
 class Price(models.Model):
-    user_first = models.ForeignKey(User, related_name="user_first")
     user = models.ForeignKey(User)
-    time_added = models.DateTimeField(default=datetime.now,editable=False) #auto
-    time_first = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
-    time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
-    confirm_counter = models.IntegerField(default=0)
+    time = models.DateTimeField(default=datetime.now)
+    time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
+
+    last_user_update = models.ForeignKey(User, related_name="last_user_update")
+    last_time_update = models.DateTimeField(default=datetime.now)
+    update_counter = models.IntegerField(default=0)
 
     shop = models.ForeignKey(Shop)
     product = models.ForeignKey(Product)
@@ -69,7 +70,7 @@ class Price(models.Model):
         return u"%s - %s %s (%s)" % (self.product, self.price, self.currency, self.shop)
 
     class Meta:
-        ordering = ["-time"]
+        ordering = ["-last_time_update"]
 
 
 class Trade(models.Model):
