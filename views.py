@@ -72,18 +72,27 @@ def price_add(request, **kwargs):
                     # count price
                     price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
 
-                    # save price
-                    # TODO check existing price and update it
-                    new_price = Price()
-                    new_price.user = request.user
-                    new_price.last_user_update = request.user
-                    new_price.time = forma.cleaned_data['time']
-                    new_price.last_time_update = forma.cleaned_data['time']
-                    new_price.shop = shop
-                    new_price.product = product
-                    new_price.price = price
-                    new_price.currency = forma.cleaned_data['currency']
-                    new_price.save()
+                    # check existing price or add new
+                    try:
+                        new_price = Price.objects.get(user=request.user, shop=shop, product=product, price=price, currency=forma.cleaned_data['currency'])
+                    except Price.DoesNotExist:
+                        new_price = None
+                    if new_price == None:
+                        new_price = Price()
+                        new_price.user = request.user
+                        new_price.last_user_update = request.user
+                        new_price.time = forma.cleaned_data['time']
+                        new_price.last_time_update = forma.cleaned_data['time']
+                        new_price.shop = shop
+                        new_price.product = product
+                        new_price.price = price
+                        new_price.currency = forma.cleaned_data['currency']
+                        new_price.save()
+                    else:
+                        new_price.last_user_update = request.user
+                        new_price.last_time_update = forma.cleaned_data['time']
+                        new_price.update_counter += 1
+                        new_price.save()
 
                     # save trade if it is not spy
                     if not forma.cleaned_data['spytrade']:

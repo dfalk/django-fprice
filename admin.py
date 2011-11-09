@@ -8,7 +8,6 @@ from fprice.forms import TradeForm
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
     actions = ['make_spy']
-    exclude = ('customer',)
     list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer']
 
     def make_spy(self, request, queryset):
@@ -29,7 +28,7 @@ class TradeAdmin(admin.ModelAdmin):
 
 class PriceAdmin(admin.ModelAdmin):
     #form = TradeForm
-    exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
+    #exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
     list_display = ['__unicode__', 'last_time_update', 'last_user_update']
 
     def save_model(self, request, obj, form, change):
