@@ -4,16 +4,16 @@
 from django.db import models
 from django import forms
 from django.forms.formsets import formset_factory
-from fprice.models import Trade, Shop
+from fprice.models import Trade, Shop, CURR_CHOICES
 import datetime
 
 class TitleForm(forms.ModelForm):
     shop_visual = forms.CharField(max_length=200, label="Shop")
     shop = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
+    currency = forms.ChoiceField(choices=CURR_CHOICES)
 
     class Meta:
         model = Trade
-        # TODO currency field
         fields = ('spytrade', 'time', 'shop_visual')
 
     def __init__(self, *args, **kwargs):

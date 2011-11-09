@@ -71,7 +71,7 @@ def price_add(request, **kwargs):
                     new_price.shop = shop
                     new_price.product = product
                     new_price.price = price
-                    #new_price.currency = forma.cleaned_data['currency']
+                    new_price.currency = forma.cleaned_data['currency']
                     new_price.save()
 
                     # save trade if it is not spy
