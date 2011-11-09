@@ -15,7 +15,15 @@
 <!--<h2>Меню прайсов</h2>-->
 <ul id="price-sidemenu">
 
-    <li id="price-admin"><h3>Личный кабинет</h3>
+    {% if request.user.is_staff %}
+    <li id="price-admin"><h3>Администрирование</h3>
+        <ul>
+        <li><a href="{% url price_trade_list %}">Список покупок</a></li>
+        </ul>
+    </li>
+    {% endif %}
+
+    <li id="price-profile"><h3>Личный кабинет</h3>
         <ul>
         <li><a href="{% url price_add %}">Добавить покупку</a></li>
         </ul>

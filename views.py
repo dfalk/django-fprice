@@ -25,6 +25,15 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
         template_name = template_name,
         **kwargs)
 
+def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Trade.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
 @login_required
 def price_add(request, **kwargs):
     if request.method == 'POST':
