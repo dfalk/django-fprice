@@ -78,13 +78,7 @@ class Trade(models.Model):
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
     time_added = models.DateTimeField(default=datetime.now,editable=False)
 
-    # FIXME clear code, it has moved to price model
     price = models.ForeignKey(Price)
-    #shop = models.ForeignKey(Shop)
-    #product = models.ForeignKey(Product)
-    #price = models.DecimalField(max_digits=19, decimal_places=2)
-    #currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
-
     amount = models.FloatField()
     cost = models.DecimalField(max_digits=12, decimal_places=2)
 
