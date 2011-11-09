@@ -42,6 +42,10 @@ class Product(models.Model):
     def __unicode__(self):
         return u"%s" % (self.title)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('fprice.views.product_detail',[unicode(self.id)])
+
     class Meta:
         ordering = ["title"]
 

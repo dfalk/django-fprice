@@ -26,6 +26,27 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
         template_name = template_name,
         **kwargs)
 
+def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
+    product = Product.objects.get(id=product_id)
+    return list_detail.object_list(
+        request,
+        queryset = Price.objects.filter(product__id=product_id),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'product':product},
+        **kwargs)
+
+@login_required
+def user_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Trade.objects.filter(customer__id=request.user.id),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
 @staff_member_required
 def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(
@@ -37,7 +58,7 @@ def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs
         **kwargs)
 
 @login_required
-def price_add(request, **kwargs):
+def trade_add(request, **kwargs):
     if request.method == 'POST':
         forma = TitleForm(request.POST)
         formset = TradeFormSet(request.POST)

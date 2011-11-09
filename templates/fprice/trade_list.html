@@ -1,6 +1,8 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
+{% block title %}Последние покупки | {{ block.super }}{% endblock %}
+
 {% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Покупки{% endblock %}
 
 {% block contentclass %}trade{% endblock %}
