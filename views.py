@@ -91,7 +91,8 @@ def trade_add(request, **kwargs):
                         product.save()
 
                     # count price
-                    price = "%.2f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+                    # TODO optional round
+                    price = "%.1f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
 
                     # check existing price or add new
                     try:
