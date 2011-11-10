@@ -90,13 +90,12 @@ def trade_add(request, **kwargs):
                         product.title = form.cleaned_data['product_visual']
                         product.save()
 
-                    # count price
-                    # TODO optional round
-                    price = "%.1f" % ( float(form.cleaned_data['cost']) / float(form.cleaned_data['amount']) )
+                    # count cost
+                    cost = "%.2f" % ( float(form.cleaned_data['price_visual']) * float(form.cleaned_data['amount']) )
 
                     # check existing price or add new
                     try:
-                        new_price = Price.objects.get(user=request.user, shop=shop, product=product, price=price, currency=forma.cleaned_data['currency'])
+                        new_price = Price.objects.get(shop=shop, product=product, price=form.cleaned_data['price_visual'], currency=forma.cleaned_data['currency'])
                     except Price.DoesNotExist:
                         new_price = None
                     if new_price == None:
@@ -107,7 +106,7 @@ def trade_add(request, **kwargs):
                         new_price.last_time_update = forma.cleaned_data['time']
                         new_price.shop = shop
                         new_price.product = product
-                        new_price.price = price
+                        new_price.price = form.cleaned_data['price_visual']
                         new_price.currency = forma.cleaned_data['currency']
                         new_price.save()
                     else:
@@ -125,6 +124,7 @@ def trade_add(request, **kwargs):
                         new_trade.shop = shop
                         new_trade.product = product
                         new_trade.price = new_price
+                        new_trade.cost = cost
                         new_trade.save()
                         form.save_m2m()
 

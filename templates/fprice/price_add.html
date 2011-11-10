@@ -51,16 +51,16 @@ th { text-align: left; }
         <thead>
             <tr>
                 <th scope="col">Product</th>
+                <th scope="col">Price</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Cost</th>
             </tr>
         </thead>
         <tbody>
         {% for form in formset.forms %}
             <tr id="{{ form.prefix }}-row">
                 <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
+                <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
                 <td>{{ form.amount.errors }}{{ form.amount }}</td>
-                <td>{{ form.cost.errors }}{{ form.cost }}</td>
              </tr>
         {% endfor %}
         </tbody>

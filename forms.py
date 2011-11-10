@@ -24,16 +24,17 @@ class TitleForm(forms.ModelForm):
 class TradeForm(forms.ModelForm):
     product_visual = forms.CharField(max_length=200, label="Product", required=True)
     product = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
+    price_visual = forms.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         model = Trade
-        fields = ('product_visual', 'amount', 'cost')
+        fields = ('product_visual', 'price_visual', 'amount')
         #exclude = ('customer', 'price')
 
     def __init__(self, *args, **kwargs):
         super(TradeForm, self).__init__(*args, **kwargs)
         self.fields['product_visual'].widget.attrs['size'] = 50
         self.fields['amount'].widget.attrs['size'] = 8
-        self.fields['cost'].widget.attrs['size'] = 9
+        self.fields['price_visual'].widget.attrs['size'] = 9
 
 TradeFormSet = formset_factory(TradeForm)
