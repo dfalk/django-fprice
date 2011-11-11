@@ -1,0 +1,39 @@
+{% extends "fprice/base_price.html" %}
+
+{% load fprice_tags %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block breadcrumbs %} - Добро пожаловать!{% endblock %}
+
+{% block contentclass %}homepage{% endblock %}
+
+{% block content %}
+<h2>О нас</h2>
+
+<p>Всем привет!</p>
+<p><a href='/about/'>Подробнее</a></p>
+
+<h2>Обновления цен</h2>
+
+{% get_latest fprice.Price 20 as price_list %}
+
+<div id="trade-add">
+<p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
+</div>
+
+<div id="price-entries">
+    <table>
+    {% for item in price_list %}
+        <tr><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></td></tr>
+    {% endfor %}
+    </table>
+<p><a href="{% url price_index %}">Подробнее</a></p>
+</div><!-- /#price-entries -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}
