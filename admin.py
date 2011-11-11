@@ -7,7 +7,7 @@ from fprice.forms import TradeForm
 
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
-    actions = ['make_spy']
+    #actions = ['make_spy']
     list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer']
 
     def make_spy(self, request, queryset):
@@ -33,7 +33,7 @@ class PriceAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.customer = request.user
+            obj.user = request.user
         obj.save()
 
 admin.site.register(Section)

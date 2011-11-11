@@ -38,7 +38,7 @@ def product_detail(request, product_id, page=0, template_name='fprice/product_de
         **kwargs)
 
 @login_required
-def user_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
+def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(
         request,
         queryset = Trade.objects.filter(customer__id=request.user.id),
@@ -48,7 +48,7 @@ def user_list(request, page=0, template_name='fprice/trade_list.html', **kwargs)
         **kwargs)
 
 @staff_member_required
-def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
+def trade_admin(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(
         request,
         queryset = Trade.objects.all(),
