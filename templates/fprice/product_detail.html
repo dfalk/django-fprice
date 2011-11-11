@@ -3,6 +3,11 @@
 
 {% block title %}Цены на {{ product.title }} | {{ block.super }}{% endblock %}
 
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
+{% endblock %}
+
 {% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Продукт{% endblock %}
 
 {% block contentclass %}price{% endblock %}
@@ -10,7 +15,114 @@
 {% block content %}
 <h1>Цены на {{ product.title }}</h1>
 
-<div id="price-entries">
+<script type="text/javascript">
+$(document).ready(function() {
+    var dataset = {
+        {% for shop in shop_list %}
+        "{{ shop.id }}": {
+            label: '{{ shop.title }}',
+            color: 0,
+            data: [{% for item in object_list %}{% ifequal item.shop.id shop.id %}
+            ["{{ item.last_time_update|date:"Y/m/d G:i:s" }}",{{ item.price }}],
+            {% endifequal %}{% endfor %}]
+        },
+        {% endfor %}
+    };
+    
+    // жесткое задание цвета магазина
+    var i = 0;
+    $.each(dataset, function(key, val) {
+        val.color = i;
+        // преобразование даты в UTC
+        for(var j = 0; j < val.data.length; ++j)
+            val.data[j][0] = Date.parse(val.data[j][0]);
+        ++i;
+    });
+
+    // вставка чекбоксов
+    var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+    var choiceContainer = $("#shop-choices");
+    $.each(dataset, function(key, val) {
+        choiceContainer.append('<br/><input type="checkbox" name="' + key +
+                               '" checked="checked" >' +
+                               '<div style="float:left;padding:1px;width:14px;height:14px;background-color:' + colors[val.color] + ';overflow:hidden"></div>'
+                               + val.label + '</input>');
+    });
+    choiceContainer.find("input").click(plotAccordingToChoices);
+
+    
+    function plotAccordingToChoices() {
+        var data = [];
+        
+        choiceContainer.find("input:checked").each(function () {
+            var key = $(this).attr("name");
+            if (key && dataset[key])
+                data.push(dataset[key]);
+        });
+
+        if (data.length > 0)
+            $.plot($("#price-plot"), data, {
+                lines: { show: true },
+                points: { show: true },
+                yaxis: {
+                    tickDecimals: 2},
+                xaxis: {
+                    minTickSize: [1, "day"],
+                    mode: "time",
+                    timeformat: "%0d<br>%b<br>%y",
+                    monthNames: ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"]},
+                grid: { hoverable: true, clickable: true },
+                legend: { show: false },
+            });
+    }
+
+    plotAccordingToChoices();
+
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    };
+
+    var previousPoint = null;
+    $("#price-plot").bind("plothover", function (event, pos, item) {
+        if (item) {
+            if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+
+                $("#tooltip").remove();
+                var x = new Date(item.datapoint[0]);
+                var y = item.datapoint[1].toFixed(2);
+                var xmonth = x.getMonth() + 1 +"";
+                if (xmonth.length == 1) {
+                    xmonth = "0" + xmonth;
+                }
+                showTooltip(item.pageX, item.pageY - 25,
+                            x.getDate() + '/' + xmonth + '/' + x.getFullYear() +
+                            " (" + x.getHours() + ":" + x.getMinutes() + ") = <strong>" + y + "</strong>");
+            }
+        }
+        else {
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+    });
+});
+</script>
+<div id="price-plot" style="width:450px; height:250px; float:right"></div>
+<!-- #price-plot -->
+
+<p id="shop-choices" style="width:400px; float:right">Магазины:</p>
+<!-- #shop-choices -->
+
+<div id="price-entries" style="margin-right:450px;">
     <table>
     {% for item in object_list %}
         <tr><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></td></tr>

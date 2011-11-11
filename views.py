@@ -28,13 +28,14 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
 
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
+    shop_list = Shop.objects.filter(pk__in=Price.objects.filter(product__id=product_id).values_list('shop', flat=True).order_by('shop').distinct())
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(product__id=product_id),
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'product':product},
+        extra_context = {'product':product, 'shop_list':shop_list},
         **kwargs)
 
 @login_required
