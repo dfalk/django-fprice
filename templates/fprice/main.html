@@ -1,34 +1,33 @@
 {% extends "fprice/base_price.html" %}
 
-{% load fprice_tags %}
+{% load seo_tags fprice_tags %}
 
-{% block title %}{{ flatpage.title }}{% endblock %}
+{% block title %}{% seo title for flatpage as seo_title %}{% if seo_title %}{{ seo_title }}{% else %}{{ flatpage.title }}{% endif %}{% endblock %}
+
+{% block description %}{% seo description for flatpage %}{% endblock %}
+
+{% block keywords %}{% seo keywords for flatpage %}{% endblock %}
 
 {% block breadcrumbs %} - Добро пожаловать!{% endblock %}
 
 {% block contentclass %}homepage{% endblock %}
 
 {% block content %}
-<h2>О нас</h2>
-
-<p>Всем привет!</p>
-<p><a href='/about/'>Подробнее</a></p>
+{{ flatpage.content }}
 
 <h2>Обновления цен</h2>
-
-{% get_latest fprice.Price 20 as price_list %}
 
 <div id="trade-add">
 <p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
 </div>
 
-<div id="price-entries">
+<div id="price-entries">{% get_latest fprice.Price 20 as price_list %}
     <table>
     {% for item in price_list %}
         <tr><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></td></tr>
     {% endfor %}
     </table>
-<p><a href="{% url price_index %}">Подробнее</a></p>
+<p><a href="{% url price_index %}">Полный список цен</a></p>
 </div><!-- /#price-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:

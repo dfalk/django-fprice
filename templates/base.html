@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
 
-<title>{% block title %}Site title{% endblock %}</title>
+<title>{% block title %}Цены говорят{% endblock %}</title>
 
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -19,11 +19,14 @@
 
 <div id="header">
 {% block header %}
-<div id="sitetitle">PriceSpeak</div>
+<div id="sitetitle"><a href="/">PriceSpeak</a> <small><i>цены говорят</i></small></div>
+<div id="siteslogan">Рост цен в прямом эфире</div>
 <div id="sitemenu">
-    <a href="/price/">Цены</a>
-    <a href="/blog/">Дневник</a>
-    <a href="/about/">О нас</a>
+    <ul>
+    <li><a href="/price/">Цены</a></li>
+    <li><a href="/blog/">Дневник</a></li>
+    <li><a href="/about/">О нас</a></li>
+    </ul>
 </div>
 {% endblock %}
 </div><!-- /#header -->
@@ -54,7 +57,11 @@
 </div><!-- /#main div -->
 
 <div id="footer" class="infobar rounded">
-{% block footer %}Site copyright{% endblock %}
+{% block footer %}
+<div id="copyright">(c) 0x studio, 2011</div>
+<div id="author">0x studio</div>
+<div class="clearfix"></div>
+{% endblock %}
 </div><!-- /#infobar footer -->
 
 </body>
