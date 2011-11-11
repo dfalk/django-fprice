@@ -116,16 +116,21 @@ $(document).ready(function() {
     });
 });
 </script>
-<div id="price-plot" style="width:450px; height:250px; float:right"></div>
+
+<div id="price-graph" style="width:450px; float:left;">
+
+<div id="price-plot" style="width:450px; height:250px;"></div>
 <!-- #price-plot -->
 
-<p id="shop-choices" style="width:400px; float:right">Магазины:</p>
+<div id="shop-choices" style="width:400px;">Магазины:</div>
 <!-- #shop-choices -->
 
-<div id="price-entries" style="margin-right:450px;">
+</div>
+
+<div id="price-entries" style="width:220px; margin-left:30px; float:right;">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></td></tr>
+        <tr><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#price-entries -->
