@@ -23,15 +23,13 @@
 <div id="sitemenu">
     <a href="/price/">Цены</a>
     <a href="/blog/">Дневник</a>
-    <a href="/">О нас</a>
+    <a href="/about/">О нас</a>
 </div>
 {% endblock %}
 </div><!-- /#header -->
 
 <div id="navline" class="infobar rounded" >
     <div id="profile">
-        <a href="/blog/">Дневник</a>
-        <a href="/price/">Цены</a>
         {% if not user.is_authenticated %}<a href="{% url auth_login %}?next={{ request.path }}">Войти</a>{% endif %}
         {% if user.is_staff %}<a href="{% url admin:index %}">Админка</a>{% endif %}
         {% if user.is_authenticated %}<a href="{% url auth_logout %}?next={{ request.path }}">Выход</a> ({{ user.username }}){% endif %}
