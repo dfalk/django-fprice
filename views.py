@@ -38,6 +38,39 @@ def product_detail(request, product_id, page=0, template_name='fprice/product_de
         extra_context = {'product':product, 'shop_list':shop_list},
         **kwargs)
 
+def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Shop.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
+def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
+    shop = Shop.objects.get(id=shop_id)
+    return list_detail.object_list(
+        request,
+        queryset = Price.objects.filter(shop__id=shop_id),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'shop':shop},
+        **kwargs)
+
+def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
+    product = Product.objects.get(id=product_id)
+    shop = Shop.objects.get(id=shop_id)
+    shop_list = Shop.objects.filter(pk=shop_id)
+    return list_detail.object_list(
+        request,
+        queryset = Price.objects.filter(product__id=product_id, shop__id=shop_id),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'shop':shop, 'product':product, 'shop_list':shop_list},
+        **kwargs)
+
 @login_required
 def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(

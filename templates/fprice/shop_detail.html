@@ -1,0 +1,31 @@
+{% extends "fprice/base_price.html" %}
+{% load comments markup %}
+
+{% block title %}Цены {{ shop.title }} | {{ block.super }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
+{% endblock %}
+
+{% block breadcrumbs %} - <a href="{% url price_shop_list %}">Магазины</a> - Магазин{% endblock %}
+
+{% block contentclass %}shop{% endblock %}
+
+{% block content %}
+<h1>Цены {{ shop.title }}</h1>
+
+<div id="price-entries">
+    <table>
+    {% for item in object_list %}
+        <tr><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product.title }}</a></td></tr>
+    {% endfor %}
+    </table>
+</div><!-- /#price-entries -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}

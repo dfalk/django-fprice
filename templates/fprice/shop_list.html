@@ -1,0 +1,26 @@
+{% extends "fprice/base_price.html" %}
+{% load comments markup %}
+
+{% block title %}Магазины | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %} - Магазины{% endblock %}
+
+{% block contentclass %}shoplist{% endblock %}
+
+{% block content %}
+<h1>Магазины</h1>
+
+<div id="shop-list">
+    <table>
+    {% for item in object_list %}
+        <tr><td><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></td></tr>
+    {% endfor %}
+    </table>
+</div><!-- /#shop-list -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}

@@ -1,26 +1,27 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Цены на {{ product.title }} | {{ block.super }}{% endblock %}
+{% block title %}Цены на {{ product.title }} в магазине {{ shop.title }} | {{ block.super }}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
 {% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Продукт{% endblock %}
+{% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - <a href="{{ product.get_absolute_url }}">Продукт</a> - Магазин{% endblock %}
 
 {% block contentclass %}price{% endblock %}
 
 {% block content %}
 <h1>Цены на {{ product.title }}</h1>
+<h2>в магазине <a href="{{ shop.get_absolute_url }}">{{ shop.title }}</a></h2>
 
 <script type="text/javascript">
 $(document).ready(function() {
     var dataset = {
         {% for shop in shop_list %}
         "{{ shop.id }}": {
-            label: '<a href="{% url price_prodshop_detail product.id shop.id %}">{{ shop.title }}</a>',
+            label: '<a href="{{ shop.get_absolute_url }}">{{ shop.title }}</a>',
             color: 0,
             data: [{% for item in object_list %}{% ifequal item.shop.id shop.id %}
             ["{{ item.last_time_update|date:"Y/m/d G:i:s" }}",{{ item.price|escapejs }}],
@@ -117,12 +118,13 @@ $(document).ready(function() {
 });
 </script>
 
+<br/>
 <div id="price-graph" style="width:450px; float:left;">
 
 <div id="price-plot" style="width:450px; height:250px;"></div>
 <!-- #price-plot -->
 
-<div id="shop-choices" style="width:400px;">Магазины:</div>
+<div id="shop-choices" style="width:400px;">Магазин:</div>
 <!-- #shop-choices -->
 
 </div>
