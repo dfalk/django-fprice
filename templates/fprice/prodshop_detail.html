@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - <a href="{{ product.get_absolute_url }}">Продукт</a> - В магазине{% endblock %}
 
-{% block contentclass %}price{% endblock %}
+{% block contentclass %}prodshop{% endblock %}
 
 {% block content %}
 <h1>Цены на <a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h1>
@@ -126,6 +126,8 @@ $(document).ready(function() {
 
 <div id="shop-choices" style="width:400px;">Магазин:</div>
 <!-- #shop-choices -->
+
+<p><a href="{{ product.get_absolute_url }}">Цены на этот товар в других магазинах</a></p>
 
 </div>
 

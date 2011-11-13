@@ -3,3 +3,7 @@
 #price-entries table tr td {
     padding-right: 3px;
 }
+
+.prodshop h1 a, a:visited {
+    text-decoration: underline;
+}

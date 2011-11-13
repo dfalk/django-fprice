@@ -18,7 +18,7 @@
 <div id="price-entries">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.last_time_update|date:"j b H:i" }}</i></td><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product.title }}</a></td></tr>
+        <tr><td><i>{{ item.last_time_update|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product.title }}</a></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#price-entries -->
