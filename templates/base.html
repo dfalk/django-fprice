@@ -23,6 +23,7 @@
 <div id="siteslogan">Рост цен в прямом эфире</div>
 <div id="sitemenu">
     <ul>
+    {% if user.is_authenticated %}<li><a href="/trade/">Мои покупки</a></li>{% endif %}
     <li><a href="/products/">Цены</a></li>
     <li><a href="/shops/">Магазины</a></li>
     <li><a href="/blog/">Дневник</a></li>
