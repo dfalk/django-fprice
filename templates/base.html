@@ -19,15 +19,15 @@
 
 <div id="header">
 {% block header %}
-<div id="sitetitle"><a href="/">PriceSpeak</a> <small><i>цены говорят</i></small></div>
-<div id="siteslogan">Рост цен в прямом эфире</div>
+<div id="sitetitle"><a href="/">Цены говорят</a></div>
+<div id="siteslogan">Динамика и рост цен в прямом эфире</div>
 <div id="sitemenu">
     <ul>
     {% if user.is_authenticated %}<li><a href="/trade/">Мои покупки</a></li>{% endif %}
     <li><a href="/products/">Цены</a></li>
     <li><a href="/shops/">Магазины</a></li>
     <li><a href="/blog/">Дневник</a></li>
-    <li><a href="/about/">О нас</a></li>
+    <li><a href="/about/">О проекте</a></li>
     </ul>
 </div>
 {% endblock %}
