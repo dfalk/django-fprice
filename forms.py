@@ -20,6 +20,7 @@ class TitleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TitleForm, self).__init__(*args, **kwargs)
         self.fields['shop_visual'].widget.attrs['size'] = 50
+        self.fields['time'].widget.attrs['size'] = 15
 
 class TradeForm(forms.ModelForm):
     product_visual = forms.CharField(max_length=200, label="Product", required=True)
@@ -34,7 +35,7 @@ class TradeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TradeForm, self).__init__(*args, **kwargs)
         self.fields['product_visual'].widget.attrs['size'] = 50
-        self.fields['amount'].widget.attrs['size'] = 8
-        self.fields['price_visual'].widget.attrs['size'] = 9
+        self.fields['price_visual'].widget.attrs['size'] = 10
+        self.fields['amount'].widget.attrs['size'] = 9
 
 TradeFormSet = formset_factory(TradeForm)
