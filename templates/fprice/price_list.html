@@ -1,14 +1,14 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Последние изменения цен | {{ block.super }}{% endblock %}
+{% block title %}Цены на товары | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %} - Цены{% endblock %}
 
 {% block contentclass %}price{% endblock %}
 
 {% block content %}
-<h1>Последние цены</h1>
+<h1>Цены на товары</h1>
 
 <div id="trade-add">
 <a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a>

@@ -1,14 +1,14 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Последние покупки | {{ block.super }}{% endblock %}
+{% block title %}Мои покупки | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Покупки{% endblock %}
 
 {% block contentclass %}trade{% endblock %}
 
 {% block content %}
-<h1>Последние покупки</h1>
+<h1>Мои покупки</h1>
 <div id="trade-entries">
     <table>
     {% for item in object_list %}

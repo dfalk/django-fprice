@@ -1,7 +1,7 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Цены {{ shop.title }} | {{ block.super }}{% endblock %}
+{% block title %}Цены в магазине {{ shop.title }} | {{ block.super }}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
@@ -13,7 +13,7 @@
 {% block contentclass %}shop{% endblock %}
 
 {% block content %}
-<h1>Цены {{ shop.title }}</h1>
+<h1>Цены в магазине {{ shop.title }}</h1>
 
 <div id="price-entries">
     <table>
