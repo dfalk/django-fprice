@@ -132,7 +132,7 @@ $(document).ready(function() {
 <div id="price-entries" style="width:220px; margin-left:30px; float:right;">
     <table>
     {% for item in object_list %}
-        <tr><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><i>{{ item.last_time_update|date:"j b H:m" }}</i></td></tr>
+        <tr><td style="text-align: right; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><i>{{ item.last_time_update|date:"j b H:i" }}</i></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#price-entries -->
