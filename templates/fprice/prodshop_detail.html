@@ -14,7 +14,7 @@
 
 {% block content %}
 <h1>Цены на <a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h1>
-<h2>в магазине <a href="{{ shop.get_absolute_url }}">{{ shop.title }}</a></h2>
+<h2>в магазине {{ shop.title }}</h2>
 
 <script type="text/javascript">
 $(document).ready(function() {
