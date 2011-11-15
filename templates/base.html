@@ -24,6 +24,9 @@
 {% block header %}
 <div id="sitetitle"><a href="/">Цены говорят</a></div>
 <div id="siteslogan">Динамика и рост цен в прямом эфире</div>
+<div id="search">
+<form action="/search/" method="GET"><input id="search_text" type="text" name="q"><input type="submit" value="Поиск"></form>
+</div>
 <div id="sitemenu">
     <ul>
     {% if user.is_authenticated %}<li><a href="/trade/">Мои покупки</a></li>{% endif %}

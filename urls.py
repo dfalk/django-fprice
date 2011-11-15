@@ -9,6 +9,8 @@ urlpatterns = patterns('fprice.views',
     url(r'^products/$', view='price_list', name='price_index'),
     url(r'^products/(?P<product_id>\d+)/$', view='product_detail', name='price_product_detail'),
 
+    url(r'^search/$', view='search', name='price_search'),
+
     url(r'^shops/$', view='shop_list', name='price_shop_list'),
     url(r'^shops/(?P<shop_id>\d+)/$', view='shop_detail', name='price_shop_detail'),
 

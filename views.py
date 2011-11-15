@@ -26,6 +26,14 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
         template_name = template_name,
         **kwargs)
 
+def search(request):
+    query = request.GET.get('q', '')
+    if query:
+        results = Price.objects.filter(product__title__icontains=query).distinct()
+    else:
+        results = []
+    return list_detail.object_list(request, queryset=results, paginate_by=30)
+
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
     shop_list = Shop.objects.filter(pk__in=Price.objects.filter(product__id=product_id).values_list('shop', flat=True).order_by('shop').distinct())

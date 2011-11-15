@@ -44,6 +44,16 @@ body {
     font-style: italic;
 }
 
+#search {
+    position: absolute;
+    top: 68px;
+    right: 0px;
+}
+
+#search_text {
+    width: 166px;
+}
+
 #sitemenu {
     position: absolute;
     top: 70px;
