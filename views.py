@@ -26,6 +26,20 @@ def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs
         template_name = template_name,
         **kwargs)
 
+@staff_member_required
+def price_up(request, price_id, **kwargs):
+    """ Hijax ajax principle """
+    price = Price.objects.get(id=price_id)
+    price.last_time_update = datetime.datetime.now()
+    price.last_user_update = request.user
+    price.update_counter += 1
+    price.save()
+    if request.is_ajax():
+        data = "counted"
+        return HttpResponse(data)
+    else:
+        return HttpResponseRedirect(reverse('price_index'))
+
 def search(request):
     query = request.GET.get('q', '')
     if query:
