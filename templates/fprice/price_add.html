@@ -75,11 +75,13 @@ $(document).ready(function(){
     $("#tradeform tbody tr").formset({
         added: function(row) {
             row.find('td:first input').addClass("ac");
+            row.find('td input[name$="price_visual"]').addClass("ac_price");
             setAc();
         }
     });
 
     $("#tradeform tbody tr td:first input").addClass("ac");
+    $('#tradeform tbody tr input[name$="price_visual"]').addClass("ac_price");
 
     $("#id_shop_visual").autocomplete({
         //Определяем обратный вызов к результатам форматирования
@@ -158,6 +160,9 @@ $(document).ready(function(){
 			    //$("#id_shop").val("").css("top", 2);
 		    },
 		    minLength: 1,
+        });
+        $( ".ac_price" ).blur(function(){
+                $(this).val($(this).val().replace(',','.'));
         });
     };
     setAc();
