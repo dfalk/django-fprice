@@ -4,7 +4,7 @@
 
 {% block extrahead %}
 {{ block.super }}
-<link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />	
+<link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.formset.min.js"></script>
@@ -87,81 +87,80 @@ $(document).ready(function(){
 
     $("#id_shop_visual").autocomplete({
         //Определяем обратный вызов к результатам форматирования
-		source: function(req, add){
+        source: function(req, add){
 
-			//Передаём запрос на сервер
-			$.getJSON("{% url json_lookup 'shop' %}", req, function(data) {
-				//Создаем массив для объектов ответа
-				var suggestions = [];
-				//Обрабатываем ответ
-				$.each(data, function(i, val){
-					suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
-				});
-				//Передаем массив обратному вызову
-				add(suggestions);
-			});
-		},
-		//Определяем обработчик селектора
-		select: function(e, ui) {
-			//Создаем форматированную переменную shop
-			var shop = ui.item.id,
-				span = $("<span>").text(shop),
-				a = $("<a>").addClass("remove").attr({
-					href: "javascript:",
-					title: "Remove " + shop
-				}).text("x").appendTo(span);
+            //Передаём запрос на сервер
+            $.getJSON("{% url json_lookup 'shop' %}", req, function(data) {
+                //Создаем массив для объектов ответа
+                var suggestions = [];
+                //Обрабатываем ответ
+                $.each(data, function(i, val){
+                    suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
+                });
+                //Передаем массив обратному вызову
+                add(suggestions);
+            });
+        },
+        //Определяем обработчик селектора
+        select: function(e, ui) {
+            //Создаем форматированную переменную shop
+            var shop = ui.item.id,
+                span = $("<span>").text(shop),
+                a = $("<a>").addClass("remove").attr({
+                    href: "javascript:",
+                    title: "Remove " + shop
+                }).text("x").appendTo(span);
 
             $("#id_shop").attr("value", ui.item.id); 
-			//Добавляем после поля 
-			//span.insertAfter("#id_shop");
-		},
-
-		//Определяем обработчик выбора
-		change: function(event,ui){
-			//Сохраняем поле 'Кому' без изменений и в правильной позиции
-			//$("#id_shop").val("").css("top", 2);
-		},
-		minLength: 1,
+            //Добавляем после поля 
+            //span.insertAfter("#id_shop");
+        },
+        //Определяем обработчик выбора
+        change: function(event,ui){
+            //Сохраняем поле 'Кому' без изменений и в правильной позиции
+            //$("#id_shop").val("").css("top", 2);
+        },
+        minLength: 1,
     });
 
     function setAc(){
         $( ".ac" ).autocomplete({
             //Определяем обратный вызов к результатам форматирования
-		    source: function(req, add){
+            source: function(req, add){
 
-			    //Передаём запрос на сервер
-			    $.getJSON("{% url json_lookup 'product' %}", req, function(data) {
-				    //Создаем массив для объектов ответа
-				    var suggestions = [];
-				    //Обрабатываем ответ
-				    $.each(data, function(i, val){
-					    suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
-				    });
-				    //Передаем массив обратному вызову
-				    add(suggestions);
-			    });
-		    },
-		    //Определяем обработчик селектора
-		    select: function(e, ui) {
-			    //Создаем форматированную переменную shop
-			    var shop = ui.item.id,
-				    span = $("<span>").text(shop),
-				    a = $("<a>").addClass("remove").attr({
-					    href: "javascript:",
-					    title: "Remove " + shop
-				    }).text("x").appendTo(span);
+                //Передаём запрос на сервер
+                $.getJSON("{% url json_lookup 'product' %}", req, function(data) {
+                    //Создаем массив для объектов ответа
+                    var suggestions = [];
+                    //Обрабатываем ответ
+                    $.each(data, function(i, val){
+                        suggestions.push({label:val.fields.title,value:val.fields.title,id:val.pk});
+                    });
+                    //Передаем массив обратному вызову
+                    add(suggestions);
+                });
+            },
+            //Определяем обработчик селектора
+            select: function(e, ui) {
+                //Создаем форматированную переменную shop
+                var shop = ui.item.id,
+                    span = $("<span>").text(shop),
+                    a = $("<a>").addClass("remove").attr({
+                        href: "javascript:",
+                        title: "Remove " + shop
+                    }).text("x").appendTo(span);
 
                 $(this).next().attr("value", ui.item.id); 
-			    //Добавляем после поля
-			    //span.insertAfter("#id_shop");
-		    },
+                //Добавляем после поля
+                //span.insertAfter("#id_shop");
+            },
 
-		    //Определяем обработчик выбора
-		    change: function(event,ui){
-			    //Сохраняем поле 'Кому' без изменений и в правильной позиции
-			    //$("#id_shop").val("").css("top", 2);
-		    },
-		    minLength: 1,
+            //Определяем обработчик выбора
+            change: function(event,ui){
+                //Сохраняем поле 'Кому' без изменений и в правильной позиции
+                //$("#id_shop").val("").css("top", 2);
+            },
+            minLength: 1,
         });
         $( ".blur_replace" ).blur(function(){
                 $(this).val($(this).val().replace(',','.'));
