@@ -72,13 +72,15 @@ def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
 
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
     shop = Shop.objects.get(id=shop_id)
+    price_param = shop_id
+    price_list = Price.objects.raw('SELECT fprice_price.id, fprice_price.shop_id, fprice_product.title, fprice_price.price, fprice_price.currency, MAX(fprice_price.last_time_update) as last_time FROM fprice_price LEFT JOIN fprice_product ON fprice_price.product_id = fprice_product.id WHERE fprice_price.shop_id=%s GROUP BY fprice_price.product_id', [price_param])
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(shop__id=shop_id),
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'shop':shop},
+        extra_context = {'shop':shop, 'price_list':price_list},
         **kwargs)
 
 def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
