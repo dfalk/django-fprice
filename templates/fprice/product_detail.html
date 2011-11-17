@@ -18,13 +18,13 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var dataset = {
-        {% for shop in shop_list %}
-        "{{ shop.id }}": {
-            label: '<a href="{% url price_prodshop_detail product.id shop.id %}">{{ shop.title }}</a>',
+        {% for shop in price_list %}
+        "{{ shop.shop_id }}": {
+            label: '<b>{{ shop.price }}</b> {{ shop.get_currency_display }} <a href="{% url price_prodshop_detail product.id shop.shop_id %}">{{ shop.title }}</a>',
             color: 0,
-            data: [{% for item in object_list %}{% ifequal item.shop.id shop.id %}
-            ["{{ item.last_time_update|date:"Y/m/d G:i:s" }}",{{ item.price|escapejs }}],
-            ["{{ item.time|date:"Y/m/d G:i:s" }}",{{ item.price|escapejs }}],
+            data: [{% for item in object_list %}{% ifequal item.shop.id shop.shop_id %}
+            ["{{ item.last_time_update|date:'Y/m/d G:i:s' }}",{{ item.price|escapejs }}],
+            ["{{ item.time|date:'Y/m/d G:i:s' }}",{{ item.price|escapejs }}],
             {% endifequal %}{% endfor %}]
         },
         {% endfor %}
@@ -123,18 +123,10 @@ $(document).ready(function() {
 <div id="price-plot" style="width:450px; height:250px;"></div>
 <!-- #price-plot -->
 
-<div id="shop-choices" style="width:400px;">Магазины:</div>
+<div id="shop-choices">Магазины:</div>
 <!-- #shop-choices -->
 
 </div>
-
-<div id="price-entries" style="width:220px; margin-left:30px; float:right;">
-    <table>
-    {% for item in object_list %}
-        <tr><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><i>{{ item.last_time_update|date:"j b H:i" }}</i></td><td><a title="{{ item.shop.title }}" href="{% url price_prodshop_detail item.product.id item.shop.id %}">маг</a></td></tr>
-    {% endfor %}
-    </table>
-</div><!-- /#price-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:
     {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
