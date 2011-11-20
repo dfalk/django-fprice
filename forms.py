@@ -20,6 +20,7 @@ class TitleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TitleForm, self).__init__(*args, **kwargs)
         self.fields['shop_visual'].widget.attrs['size'] = 50
+        self.fields['shop_visual'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['time'].widget.attrs['size'] = 15
 
 class TradeForm(forms.ModelForm):
