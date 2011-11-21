@@ -51,7 +51,7 @@ def search(request):
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
     price_param = product_id
-    price_list = Price.objects.raw('SELECT fprice_price.id, fprice_price.shop_id, fprice_shop.title, fprice_price.price, fprice_price.currency, MAX(fprice_price.last_time_update) as last_time FROM fprice_price LEFT JOIN fprice_shop ON fprice_price.shop_id = fprice_shop.id WHERE fprice_price.product_id=%s GROUP BY fprice_price.shop_id', [price_param])
+    price_list = Price.objects.raw('SELECT * FROM fprice_price fp,(SELECT max(last_time_update) as maxdate, id FROM fprice_price GROUP BY shop_id) maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.product_id = %s', [price_param])
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(product__id=product_id),
