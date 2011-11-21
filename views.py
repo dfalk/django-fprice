@@ -74,7 +74,6 @@ def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html
     shop = Shop.objects.get(id=shop_id)
     price_param = shop_id
     price_list = Price.objects.raw('SELECT * FROM fprice_price AS fp, (SELECT fprice_price.id, fprice_product.title, max(fprice_price.last_time_update) as maxdate FROM fprice_price LEFT JOIN fprice_product ON fprice_price.product_id = fprice_product.id GROUP BY shop_id, product_id) AS maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.shop_id = %s', [price_param])
-    print list(price_list)
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(shop__id=shop_id),
