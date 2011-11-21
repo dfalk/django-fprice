@@ -51,7 +51,7 @@ def search(request):
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
     price_param = product_id
-    price_list = Price.objects.raw('SELECT * FROM fprice_price AS fp, (SELECT fprice_price.id, fprice_shop.title, max(fprice_price.last_time_update) as maxdate FROM fprice_price LEFT JOIN fprice_shop ON fprice_price.shop_id = fprice_shop.id GROUP BY shop_id) AS maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.product_id = %s ORDER BY price ASC', [price_param])
+    price_list = Price.objects.raw('SELECT * FROM fprice_price AS fp, (SELECT fprice_price.id, fprice_shop.title, max(fprice_price.last_time_update) as maxdate FROM fprice_price LEFT JOIN fprice_shop ON fprice_price.shop_id = fprice_shop.id GROUP BY shop_id, product_id) AS maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.product_id = %s ORDER BY price ASC', [price_param])
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(product__id=product_id),
@@ -73,7 +73,8 @@ def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
     shop = Shop.objects.get(id=shop_id)
     price_param = shop_id
-    price_list = Price.objects.raw('SELECT * FROM fprice_price AS fp, (SELECT fprice_price.id, fprice_product.title, max(fprice_price.last_time_update) as maxdate FROM fprice_price LEFT JOIN fprice_product ON fprice_price.product_id = fprice_product.id GROUP BY product_id) AS maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.shop_id = %s', [price_param])
+    price_list = Price.objects.raw('SELECT * FROM fprice_price AS fp, (SELECT fprice_price.id, fprice_product.title, max(fprice_price.last_time_update) as maxdate FROM fprice_price LEFT JOIN fprice_product ON fprice_price.product_id = fprice_product.id GROUP BY shop_id, product_id) AS maxresults WHERE fp.last_time_update = maxresults.maxdate AND fp.shop_id = %s', [price_param])
+    print list(price_list)
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(shop__id=shop_id),
