@@ -51,7 +51,7 @@ def search(request):
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
     price_param = product_id
-    price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT MAX(id) as maxid, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING product_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.maxid = fp.id) as ffull LEFT JOIN fprice_shop AS fs ON ffull.shop_id = fs.id', [price_param])
+    price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT product_id, shop_id, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING product_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.shop_id = fp.shop_id AND fmax.maxtime = fp.last_time_update) as ffull LEFT JOIN fprice_shop AS fs ON ffull.shop_id = fs.id', [price_param])
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(product__id=product_id),
@@ -73,7 +73,7 @@ def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
     shop = Shop.objects.get(id=shop_id)
     price_param = shop_id
-    price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT MAX(id) as maxid, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING shop_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.maxid = fp.id) as ffull LEFT JOIN fprice_product AS fs ON ffull.product_id = fs.id', [price_param])
+    price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT shop_id, product_id, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING shop_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.product_id = fp.product_id AND fmax.maxtime = fp.last_time_update) as ffull LEFT JOIN fprice_product AS fs ON ffull.product_id = fs.id', [price_param])
     return list_detail.object_list(
         request,
         queryset = Price.objects.filter(shop__id=shop_id),
