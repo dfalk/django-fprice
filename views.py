@@ -13,7 +13,7 @@ from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
-from fprice.models import Section, Product, Shop, Trade, Price
+from fprice.models import Shop, ProductCategory, Product, Price, Trade
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
@@ -47,6 +47,10 @@ def search(request):
     else:
         results = []
     return list_detail.object_list(request, queryset=results, paginate_by=30)
+
+def product_category(request, slug, **kwargs):
+    #TODO
+    pass
 
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
