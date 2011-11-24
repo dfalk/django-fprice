@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from fprice.models import Section, Product, Trade, Shop, Price
+from fprice.models import Shop, ProductCategory, Product, Price, Trade
 from fprice.forms import TradeForm
+from mptt.admin import MPTTModelAdmin
 
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
@@ -36,8 +37,8 @@ class PriceAdmin(admin.ModelAdmin):
             obj.user = request.user
         obj.save()
 
-admin.site.register(Section)
 admin.site.register(Shop)
 admin.site.register(Product)
+admin.site.register(ProductCategory, MPTTModelAdmin)
 admin.site.register(Trade, TradeAdmin)
 admin.site.register(Price, PriceAdmin)

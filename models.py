@@ -3,6 +3,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+import mptt
 from datetime import datetime
 
 
@@ -20,14 +21,34 @@ class Shop(models.Model):
         ordering = ["title"]
 
 
-class Section(models.Model):
+class ProductCategory(models.Model):
     title = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, max_length=50)
+    description = models.TextField(blank=True)
+    position = models.PositiveIntegerField(default=0)
+
+    parent = models.ForeignKey('self', null=True, blank=True,
+                               related_name='children')
 
     def __unicode__(self):
         return u"%s" % (self.title)
 
+    @property
+    def tree_path(self):
+        """Return category's tree path, by his ancestors"""
+        if self.parent:
+            return '%s/%s' % (self.parent.tree_path, self.slug)
+        return self.slug
+
+    @models.permalink
+    def get_absolute_url(self):
+        """Return category's URL"""
+        return ('price_product_category', (self.tree_path,))
+
     class Meta:
         ordering = ["title"]
+
+mptt.register(ProductCategory, order_insertion_by=['title'])
 
 
 UNIT_CHOICES = (
@@ -40,7 +61,7 @@ UNIT_CHOICES = (
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    section = models.ForeignKey(Section, null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, null=True, blank=True)
     description = models.TextField(blank=True)
 
     def __unicode__(self):

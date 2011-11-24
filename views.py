@@ -17,7 +17,7 @@ from fprice.models import Section, Product, Shop, Trade, Price
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
-def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
+def product_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
     return list_detail.object_list(
         request,
         queryset = Price.objects.all(),
@@ -38,7 +38,7 @@ def price_up(request, price_id, **kwargs):
         data = "counted"
         return HttpResponse(data)
     else:
-        return HttpResponseRedirect(reverse('price_index'))
+        return HttpResponseRedirect(reverse(request.path))
 
 def search(request):
     query = request.GET.get('q', '')
@@ -187,7 +187,7 @@ def trade_add(request, **kwargs):
                         new_trade.save()
                         form.save_m2m()
 
-            return HttpResponseRedirect(reverse('price_index'))
+            return HttpResponseRedirect(reverse('price_trade_list'))
     else:
         forma = TitleForm()
         formset = TradeFormSet()
