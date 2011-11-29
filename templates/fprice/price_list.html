@@ -10,8 +10,10 @@
 {% block content %}
 <h1>Цены на товары</h1>
 
+{% if category %}<h2>в категории: {{ category.title }}</h2>{% endif %}
+
 <div id="trade-add">
-<a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a>
+<p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
 </div>
 <br />
 <div id="price-entries">
