@@ -2,9 +2,48 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django import forms
+from django.shortcuts import render_to_response
+from django.views.generic.simple import direct_to_template
+from django.http import HttpResponse, HttpResponseRedirect
 from fprice.models import Shop, ProductCategory, Product, Price, Trade
 from fprice.forms import TradeForm
 from mptt.admin import MPTTModelAdmin
+
+class ProductAdmin(admin.ModelAdmin):
+    #form = TradeForm
+    actions = ['change_category']
+    list_display = ['__unicode__', 'category']
+
+    class CategoryForm(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        category = forms.ModelChoiceField(ProductCategory.objects)
+
+    def change_category(self, request, queryset):
+        form = None
+        if 'cancel' in request.POST:
+            self.message_user(request, 'Canceled items categorization')
+            return
+        elif 'categorize' in request.POST:
+            #do the categorization
+            form = self.CategoryForm(request.POST)
+            if form.is_valid():
+                category = form.cleaned_data['category']
+                count = 0
+                for item in queryset:
+                    item.category = category
+                    item.save()
+                    count += 1
+                plural = ''
+                if count != 1:
+                    plural = 's'
+                self.message_user(request, "Successfully added category %s to %d item%s." % (category, count, plural))
+                return HttpResponseRedirect(request.get_full_path())
+        if not form:
+            form = self.CategoryForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        return direct_to_template(request, 'admin/set_category.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
+
+    change_category.short_description = 'Set category'
 
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
@@ -38,7 +77,7 @@ class PriceAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(Shop)
-admin.site.register(Product)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, MPTTModelAdmin)
 admin.site.register(Trade, TradeAdmin)
 admin.site.register(Price, PriceAdmin)
