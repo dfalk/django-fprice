@@ -36,8 +36,8 @@ class ProductCategory(models.Model):
     @property
     def tree_path(self):
         """Return category's tree path, by his ancestors"""
-        if self.parent:
-            return '%s/%s' % (self.parent.tree_path, self.slug)
+        #if self.parent:
+        #    return '%s/%s' % (self.parent.tree_path, self.slug)
         return self.slug
 
     @models.permalink
