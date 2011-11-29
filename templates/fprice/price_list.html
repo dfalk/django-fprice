@@ -1,21 +1,26 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Цены на товары | {{ block.super }}{% endblock %}
+{% block title %}Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %} - Цены{% endblock %}
+{% block breadcrumbs %} - {% if category %}<a href="{% url price_product_list %}">Товары</a> - Категория{% else %}Товары{% endif %}{% endblock %}
 
 {% block contentclass %}price{% endblock %}
 
 {% block content %}
-<h1>Цены на товары</h1>
+<h1>Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %}</h1>
 
-{% if category %}<h2>в категории: {{ category.title }}</h2>{% endif %}
+{% if categories %}<div id="product-categories">
+<ul>{% for ctg in categories %}
+<li><a href="{{ ctg.get_absolute_url }}">{{ ctg.title }}</a></li>
+{% endfor %}</ul>
+</div>
+{% endif %}
 
 <div id="trade-add">
 <p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
 </div>
-<br />
+
 <div id="price-entries">
     <table>
     {% for item in object_list %}

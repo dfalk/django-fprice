@@ -18,12 +18,14 @@ from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
 def product_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
+    categories = ProductCategory.objects.all()
     return list_detail.object_list(
         request,
         queryset = Price.objects.all(), #TODO get only last_time prices
         paginate_by = 30,
         page = page,
         template_name = template_name,
+        extra_context = {'categories':categories},
         **kwargs)
 
 def product_category(request, slug, page=0, template_name='fprice/price_list.html', **kwargs):
