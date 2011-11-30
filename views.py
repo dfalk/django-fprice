@@ -17,7 +17,7 @@ from fprice.models import Shop, ProductCategory, Product, Price, Trade
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
-def product_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
+def product_list(request, page=0, template_name='fprice/product_list.html', **kwargs):
     categories = ProductCategory.objects.all()
     return list_detail.object_list(
         request,
@@ -28,7 +28,7 @@ def product_list(request, page=0, template_name='fprice/price_list.html', **kwar
         extra_context = {'categories':categories},
         **kwargs)
 
-def product_category(request, slug, page=0, template_name='fprice/price_list.html', **kwargs):
+def product_category(request, slug, page=0, template_name='fprice/product_list.html', **kwargs):
     category = ProductCategory.objects.get(slug=slug)
     return list_detail.object_list(
         request,
@@ -56,7 +56,7 @@ def price_up(request, price_id, **kwargs):
 def search(request):
     query = request.GET.get('q', '')
     if query:
-        results = Price.objects.filter(product__title__icontains=query).distinct()
+        results = Product.objects.filter(title__icontains=query).distinct()
     else:
         results = []
     return list_detail.object_list(request, queryset=results, paginate_by=30)
