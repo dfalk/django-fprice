@@ -21,7 +21,7 @@ def product_list(request, page=0, template_name='fprice/price_list.html', **kwar
     categories = ProductCategory.objects.all()
     return list_detail.object_list(
         request,
-        queryset = Price.objects.all(), #TODO get only last_time prices
+        queryset = Product.objects.all(),
         paginate_by = 30,
         page = page,
         template_name = template_name,
@@ -32,7 +32,7 @@ def product_category(request, slug, page=0, template_name='fprice/price_list.htm
     category = ProductCategory.objects.get(slug=slug)
     return list_detail.object_list(
         request,
-        queryset = Price.objects.filter(product__category=category), #TODO get only last_time prices
+        queryset = Product.objects.filter(category=category),
         paginate_by = 30,
         page = page,
         template_name = template_name,

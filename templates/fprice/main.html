@@ -15,6 +15,14 @@
 {% block content %}
 {{ flatpage.content }}
 
+<h2>Каталог товаров</h2>{% get_latest fprice.ProductCategory 999 as category_list %}
+
+<div id="product-categories">
+<ul>{% for cat in category_list %}
+    <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
+{% endfor %}</ul>
+</div>
+
 <h2>Обновления цен</h2>
 
 <div id="trade-add">
