@@ -1,17 +1,15 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Мои покупки | {{ block.super }}{% endblock %}
+{% block title %}Покупки {{ summary.time }} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %} - Покупки{% endblock %}
+{% block breadcrumbs %} - <a href="{% url price_summary_list %}">Мои итоги</a> - Покупки{% endblock %}
 
-{% block contentclass %}trade{% endblock %}
+{% block contentclass %}summary{% endblock %}
 
 {% block content %}
-<h1>Мои покупки</h1>
-<div id="trade-add">
-<a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a>
-</div>
+<h1>Покупки {{ summary.time }}</h1>
+<h2>в магазине <a href="{{ summary.shop.get_absolute_url }}">{{ summary.shop.title }}</a></h2>
 <br />
 <div id="trade-entries">
     <table>
@@ -19,6 +17,7 @@
         <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.cost }}</b></td><td>{{ item.price.get_currency_display }}</td><td><a title="{{ item.price.shop.title }}" href="{% url price_prodshop_detail item.price.product.id item.price.shop.id %}">{{ item.price.product }}</a></td></tr>
     {% endfor %}
     </table>
+    <p>Сумма покупки: <b><big>{{ summary.get_abs_summary }}</big> {{ summary.get_currency_display }}</b></p>
 </div><!-- /#trade-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:

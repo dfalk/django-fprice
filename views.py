@@ -13,7 +13,7 @@ from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
-from fprice.models import Shop, ProductCategory, Product, Price, Trade
+from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
@@ -110,6 +110,27 @@ def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice
         **kwargs)
 
 @login_required
+def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Summary.objects.filter(user=request.user),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
+def summary_detail(request, summary_id, page=0, template_name='fprice/summary_detail.html', **kwargs):
+    summary = Summary.objects.get(id=summary_id)
+    return list_detail.object_list(
+        request,
+        queryset = Trade.objects.filter(summary=summary),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'summary':summary},
+        **kwargs)
+
+@login_required
 def trade_list(request, page=0, template_name='fprice/trade_list.html', **kwargs):
     return list_detail.object_list(
         request,
@@ -146,6 +167,15 @@ def trade_add(request, **kwargs):
                 shop = Shop()
                 shop.title = forma.cleaned_data['shop_visual']
                 shop.save()
+
+            if not forma.cleaned_data['spytrade']:
+                new_summ = Summary()
+                new_summ.time = forma.cleaned_data['time']
+                new_summ.user = request.user
+                new_summ.shop = shop
+                new_summ.currency = forma.cleaned_data['currency']
+                new_summ.summary = 0 - forma.cleaned_data['summary']
+                new_summ.save()
 
             for form in formset.forms:
 
@@ -197,6 +227,7 @@ def trade_add(request, **kwargs):
                         new_trade.product = product
                         new_trade.price = new_price
                         new_trade.cost = cost
+                        new_trade.summary = new_summ
                         new_trade.save()
                         form.save_m2m()
 

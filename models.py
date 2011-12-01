@@ -102,6 +102,30 @@ class Price(models.Model):
         ordering = ["-last_time_update"]
 
 
+class Summary(models.Model):
+    user = models.ForeignKey(User)
+    time = models.DateTimeField(default=datetime.now)
+    time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
+
+    shop = models.ForeignKey(Shop, blank=True, null=True)
+    summary = models.DecimalField(max_digits=19, decimal_places=2)
+    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+
+    def __unicode__(self):
+        return u"%s %s - %s" % (self.summary, self.currency, self.time)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('fprice.views.summary_detail',[unicode(self.id)])
+
+    def get_abs_summary(self):
+        return u"%.2f" % (abs(self.summary))
+    get_abs_summary.short_description = "Absolute summary"
+
+    class Meta:
+        ordering = ["-time"]
+
+
 class Trade(models.Model):
     customer = models.ForeignKey(User)
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
@@ -110,6 +134,7 @@ class Trade(models.Model):
     price = models.ForeignKey(Price)
     amount = models.FloatField()
     cost = models.DecimalField(max_digits=12, decimal_places=2)
+    summary = models.ForeignKey(Summary, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s - %s" % (self.price.product, self.amount)

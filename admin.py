@@ -6,7 +6,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.views.generic.simple import direct_to_template
 from django.http import HttpResponse, HttpResponseRedirect
-from fprice.models import Shop, ProductCategory, Product, Price, Trade
+from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
 from fprice.forms import TradeForm
 from mptt.admin import MPTTModelAdmin
 
@@ -66,6 +66,14 @@ class TradeAdmin(admin.ModelAdmin):
             #obj.price = "%.2f" % ( float(obj.cost) / float(obj.amount) )
         obj.save()
 
+class SummaryAdmin(admin.ModelAdmin):
+    list_display = ['__unicode__', 'time', 'user', 'shop']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.user = request.user
+        obj.save()
+
 class PriceAdmin(admin.ModelAdmin):
     #form = TradeForm
     #exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
@@ -80,4 +88,5 @@ admin.site.register(Shop)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, MPTTModelAdmin)
 admin.site.register(Trade, TradeAdmin)
+admin.site.register(Summary, SummaryAdmin)
 admin.site.register(Price, PriceAdmin)

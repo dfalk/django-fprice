@@ -12,6 +12,7 @@ class TitleForm(forms.ModelForm):
     shop = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
     currency = forms.ChoiceField(choices=CURR_CHOICES, initial='rur')
     spytrade = forms.BooleanField(initial=False, required=False) # if true it makes only price instance without trade
+    summary = forms.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         model = Trade
@@ -22,6 +23,7 @@ class TitleForm(forms.ModelForm):
         self.fields['shop_visual'].widget.attrs['size'] = 50
         self.fields['shop_visual'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['time'].widget.attrs['size'] = 15
+        self.fields['summary'].widget.attrs['size'] = 10
 
 class TradeForm(forms.ModelForm):
     product_visual = forms.CharField(max_length=200, label="Product", required=True)

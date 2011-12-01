@@ -1,0 +1,26 @@
+{% extends "fprice/base_price.html" %}
+{% load comments markup %}
+
+{% block title %}Мои итоги | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %} - Мои итоги{% endblock %}
+
+{% block contentclass %}summary{% endblock %}
+
+{% block content %}
+<h1>Мои итоги</h1>
+<br />
+<div id="summary-entries">
+    <table>
+    {% for item in object_list %}
+        <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b><a href="{{ item.get_absolute_url }}">{{ item.summary }}</a></b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_shop_detail item.shop.id %}">{{ item.shop.title }}</a></td></tr>
+    {% endfor %}
+    </table>
+</div><!-- /#trade-entries -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}

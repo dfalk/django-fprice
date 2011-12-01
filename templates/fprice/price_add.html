@@ -14,7 +14,7 @@ th { text-align: left; }
 </style>
 {% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - Новая покупка{% endblock %}
+{% block breadcrumbs %} - <a href="{% url price_summary_list %}">Профиль</a> - Новая покупка{% endblock %}
 
 {% block contentclass %}price-add{% endblock %}
 {% block content %}
@@ -22,13 +22,15 @@ th { text-align: left; }
 
 <form action="" method="post">{% csrf_token %}
     {{ forma.shop }}
+    <div><p>{{ forma.spytrade.errors }}
+    {{ forma.spytrade }} <b>Режим цен</b> (данные не будут вносится в ваши покупки)</p></div>
+    
     <table id="titleform">
         <thead>
             <tr>
                 <th scope="col">Магазин (название, город, адрес)</th>
                 <th scope="col">Дата и время</th>
                 <th scope="col">Валюта</th>
-                <th scope="col">Шпион</th>
             </tr>
         </thead>
         <tbody>
@@ -36,13 +38,11 @@ th { text-align: left; }
                 <td>{{ forma.shop_visual }}</td>
                 <td>{{ forma.time }}</td>
                 <td>{{ forma.currency }} </td>
-                <td>{{ forma.spytrade }}</td>
              </tr>
             <tr class="form-errors-row">
                 <td>{{ forma.shop_visual.errors }}</td>
                 <td>{{ forma.time.errors }}</td>
                 <td>{{ forma.currency.errors }} </td>
-                <td>{{ forma.spytrade.errors }}</td>
              </tr>
         </tbody>
     </table>
@@ -65,6 +65,7 @@ th { text-align: left; }
         {% endfor %}
         </tbody>
     </table>
+    <div style="width: 676px; text-align: right"><b>Общая сумма</b> {{ form.summary.errors }}{{ forma.summary }}</div>
     {{ formset.management_form }}
     <br />
     <input type="submit" value="Сохранить" />
