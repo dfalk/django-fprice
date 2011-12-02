@@ -17,6 +17,14 @@ from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
 from fprice.forms import TradeForm, TradeFormSet, TitleForm
 
 
+def search(request):
+    query = request.GET.get('q', '')
+    if query:
+        results = Product.objects.filter(title__icontains=query).distinct()
+    else:
+        results = []
+    return list_detail.object_list(request, queryset=results, paginate_by=30)
+
 def product_list(request, page=0, template_name='fprice/product_list.html', **kwargs):
     categories = ProductCategory.objects.all()
     return list_detail.object_list(
@@ -39,28 +47,6 @@ def product_category(request, slug, page=0, template_name='fprice/product_list.h
         template_name = template_name,
         extra_context = {'category':category},
         **kwargs)
-
-@staff_member_required
-def price_up(request, price_id, **kwargs):
-    """ Hijax ajax principle """
-    price = Price.objects.get(id=price_id)
-    price.last_time_update = datetime.datetime.now()
-    price.last_user_update = request.user
-    price.update_counter += 1
-    price.save()
-    if request.is_ajax():
-        data = "counted"
-        return HttpResponse(data)
-    else:
-        return HttpResponseRedirect(reverse(request.path))
-
-def search(request):
-    query = request.GET.get('q', '')
-    if query:
-        results = Product.objects.filter(title__icontains=query).distinct()
-    else:
-        results = []
-    return list_detail.object_list(request, queryset=results, paginate_by=30)
 
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
@@ -110,6 +96,20 @@ def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice
         extra_context = {'shop':shop, 'product':product, 'shop_list':shop_list},
         **kwargs)
 
+@staff_member_required
+def price_up(request, price_id, **kwargs):
+    """ Hijax ajax principle """
+    price = Price.objects.get(id=price_id)
+    price.last_time_update = datetime.datetime.now()
+    price.last_user_update = request.user
+    price.update_counter += 1
+    price.save()
+    if request.is_ajax():
+        data = "counted"
+        return HttpResponse(data)
+    else:
+        return HttpResponseRedirect(reverse(request.path))
+
 @login_required
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
     return list_detail.object_list(
@@ -120,6 +120,7 @@ def summary_list(request, page=0, template_name='fprice/summary_list.html', **kw
         template_name = template_name,
         **kwargs)
 
+@login_required
 def summary_detail(request, summary_id, page=0, template_name='fprice/summary_detail.html', **kwargs):
     summary = Summary.objects.get(id=summary_id)
     return list_detail.object_list(
@@ -129,6 +130,26 @@ def summary_detail(request, summary_id, page=0, template_name='fprice/summary_de
         page = page,
         template_name = template_name,
         extra_context = {'summary':summary},
+        **kwargs)
+
+@login_required
+def price_list(request, page=0, template_name='fprice/price_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Price.objects.filter(user=request.user),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
+@staff_member_required
+def price_admin(request, page=0, template_name='fprice/price_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = Price.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
         **kwargs)
 
 @login_required
@@ -237,8 +258,7 @@ def trade_add(request, **kwargs):
         forma = TitleForm()
         formset = TradeFormSet()
 
-    return direct_to_template(request, 'fprice/price_add.html',{'formset':formset, 'forma':forma})
-
+    return direct_to_template(request, 'fprice/trade_add.html',{'formset':formset, 'forma':forma})
 
 def lookup(request, what):
     results = []

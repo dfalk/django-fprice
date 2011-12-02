@@ -18,7 +18,8 @@
     {% if request.user.is_staff %}
     <li id="price-admin"><h3>Администрирование</h3>
         <ul>
-        <li><a href="{% url price_trade_admin %}">Список покупок</a></li>
+        <li><a href="{% url price_admin %}">Все цены</a></li>
+        <li><a href="{% url price_trade_admin %}">Все покупки</a></li>
         </ul>
     </li>
     {% endif %}
@@ -28,7 +29,8 @@
         <ul>
         <li><a href="{% url price_trade_add %}">Добавить покупку</a></li>
         <li><a href="{% url price_trade_list %}">Мои покупки</a></li>
-        <li><a href="{% url price_summary_list %}">Мои итоги</a></li>
+        <li><a href="{% url price_list %}">Мои цены</a></li>
+        <li><a href="{% url price_summary_list %}">Мои отчеты</a></li>
         </ul>
     </li>
     {% endif %}

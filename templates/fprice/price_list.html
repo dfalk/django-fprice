@@ -1,22 +1,22 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Мои отчеты | {{ block.super }}{% endblock %}
+{% block title %}Мои цены | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %} - Мои отчеты{% endblock %}
+{% block breadcrumbs %} - Мои цены{% endblock %}
 
-{% block contentclass %}summary{% endblock %}
+{% block contentclass %}price{% endblock %}
 
 {% block content %}
-<h1>Мои отчеты</h1>
+<h1>Мои цены</h1>
 <div id="trade-add">
 <a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a>
 </div>
 <br />
-<div id="summary-entries">
+<div id="price-entries">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b><a href="{{ item.get_absolute_url }}">{{ item.summary }}</a></b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_shop_detail item.shop.id %}">{{ item.shop.title }}</a></td></tr>
+        <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a title="{{ item.shop.title }}" href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product }}</a></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#trade-entries -->
