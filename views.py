@@ -237,6 +237,8 @@ def trade_add(request, **kwargs):
                         if forma.cleaned_data['time'] > new_price.last_time_update:
                             new_price.last_user_update = request.user
                             new_price.last_time_update = forma.cleaned_data['time']
+                        if forma.cleaned_data['time'] < new_price.time:
+                            new_price.time = forma.cleaned_data['time']
                         new_price.update_counter += 1
                         new_price.save()
 
