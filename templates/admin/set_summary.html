@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+    <h1>Summarize items</h1>
+    <p>Set the summary for the selected item{{ items|pluralize }}:</p>
+    <form method="post" action="{{ path }}">{% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <p>
+            <input type="hidden" name="action" value="change_summary" />
+            <input type="submit" name="cancel" value="Cancel" />
+            <input type="submit" name="summarize" value="Summarize" />
+        </p>
+    </form>
+    <h2>This summarization will affect the following:</h2>
+    <ul>
+        {% for item in items %}
+            <li>{{ item }} on page {{ item.page }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
