@@ -14,10 +14,10 @@
 <div id="trade-entries">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.cost }}</b></td><td>{{ item.price.get_currency_display }}</td><td><a title="{{ item.price.shop.title }}" href="{% url price_prodshop_detail item.price.product.id item.price.shop.id %}">{{ item.price.product }}</a></td></tr>
+        <tr><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.cost }}</b></td><td>{{ item.price.get_currency_display }}</td><td><a title="{{ item.price.shop.title }}" href="{% url price_prodshop_detail item.price.product.id item.price.shop.id %}">{{ item.price.product }}</a></td></tr>
     {% endfor %}
     </table>
-    <p>Сумма покупки: <b><big>{{ summary.get_abs_summary }}</big> {{ summary.get_currency_display }}</b></p>
+    <p>Сумма покупок: <b><big>{{ summary.get_abs_summary }}</big> {{ summary.get_currency_display }}</b></p>
 </div><!-- /#trade-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:

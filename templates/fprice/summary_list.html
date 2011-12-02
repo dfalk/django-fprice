@@ -16,7 +16,7 @@
 <div id="summary-entries">
     <table>
     {% for item in object_list %}
-        <tr><td><i>{{ item.time|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b><a href="{{ item.get_absolute_url }}">{{ item.summary }}</a></b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_shop_detail item.shop.id %}">{{ item.shop.title }}</a></td></tr>
+        <tr><td><i>{{ item.time|date:"Y, j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b><a href="{{ item.get_absolute_url }}">{{ item.summary }}</a></b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_shop_detail item.shop.id %}">{{ item.shop.title }}</a></td></tr>
     {% endfor %}
     </table>
 </div><!-- /#trade-entries -->
