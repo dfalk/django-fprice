@@ -10,8 +10,8 @@ from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
 from fprice.forms import TradeForm
 from mptt.admin import MPTTModelAdmin
 
+
 class ProductAdmin(admin.ModelAdmin):
-    #form = TradeForm
     actions = ['change_category']
     list_display = ['__unicode__', 'category']
 
@@ -45,10 +45,49 @@ class ProductAdmin(admin.ModelAdmin):
 
     change_category.short_description = 'Set category'
 
+
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
-    #actions = ['make_spy']
+    actions = ['change_summary']
     list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer']
+
+    class SummaryForm(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        summary = forms.DecimalField(max_digits=12, decimal_places=2)
+
+    def change_summary(self, request, queryset):
+        form = None
+        if 'cancel' in request.POST:
+            self.message_user(request, 'Canceled items summarization')
+            return
+        elif 'summarize' in request.POST:
+            #do the summarization
+            form = self.SummaryForm(request.POST)
+            if form.is_valid():
+                summary = form.cleaned_data['summary']
+                count = 0
+                new_summ = Summary()
+                new_summ.user = request.user
+                new_summ.time = queryset[0].time
+                new_summ.time_added = queryset[0].time_added
+                new_summ.shop = queryset[0].price.shop
+                new_summ.summary = 0 - summary
+                new_summ.currency = queryset[0].price.currency
+                new_summ.save()
+                for item in queryset:
+                    item.summary = new_summ
+                    item.save()
+                    count += 1
+                plural = ''
+                if count != 1:
+                    plural = 's'
+                self.message_user(request, "Successfully summarized %d item%s in %s." % (count, plural, summary))
+                return HttpResponseRedirect(request.get_full_path())
+        if not form:
+            form = self.SummaryForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        return direct_to_template(request, 'admin/set_summary.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
+
+    change_summary.short_description = 'Set summary'
 
     def make_spy(self, request, queryset):
         rows_updated = queryset.update(spytrade=True)
