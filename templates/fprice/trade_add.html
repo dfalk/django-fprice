@@ -65,7 +65,7 @@ th { text-align: left; }
         {% endfor %}
         </tbody>
     </table>
-    <div style="width: 676px; text-align: right"><b>Общая сумма</b> {{ forma.summary.errors }}{{ forma.summary }}</div>
+    <div style="width: 676px; text-align: right"><b>Общая сумма</b> {{ form.summary.errors }}{{ forma.summary }}</div>
     {{ formset.management_form }}
     <br />
     <input type="submit" value="Сохранить" />
@@ -73,6 +73,18 @@ th { text-align: left; }
 
 <script type="text/javascript">
 $(document).ready(function(){
+    function SummaryCalc(){
+        sum = 0;
+        $('#tradeform tbody tr').each(function(){
+            var cost = parseFloat($('td:eq(1) input',this).val());
+            cost = isNaN(cost) ? 0 : cost;
+            var col = parseFloat($('td:eq(2) input',this).val());
+            col = isNaN(col) ? 0 : col;
+            sum += cost * col;
+        });
+        $("#id_summary").val(sum);
+    };
+    
     $("#tradeform tbody tr").formset({
         added: function(row) {
             row.find('td:first input').addClass("ac");
@@ -123,6 +135,9 @@ $(document).ready(function(){
         },
         minLength: 1,
     });
+    $( "#id_summary" ).blur(function(){
+        $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+    });
 
     function setAc(){
         $( ".ac" ).autocomplete({
@@ -164,7 +179,8 @@ $(document).ready(function(){
             minLength: 1,
         });
         $( ".blur_replace" ).blur(function(){
-                $(this).val($(this).val().replace(',','.'));
+                $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+                SummaryCalc();
         });
     };
     setAc();
