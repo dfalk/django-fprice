@@ -1,5 +1,5 @@
 {% extends "fprice/base_price.html" %}
-{% load comments markup %}
+{% load comments markup mptt_tags %}
 
 {% block title %}Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %} | {{ block.super }}{% endblock %}
 
@@ -10,12 +10,22 @@
 {% block content %}
 <h1>Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %}</h1>
 
-{% if categories %}<div id="product-categories">
-<ul>{% for ctg in categories %}
-<li><a href="{{ ctg.get_absolute_url }}">{{ ctg.title }}</a></li>
-{% endfor %}</ul>
-</div>
-{% endif %}
+{% if not category %}<div id="product-categories">
+
+<ul class="product-cat">{% full_tree_for_model fprice.ProductCategory as nodes %}
+    {% recursetree nodes %}
+        <li>
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
+</div>{% endif %}
 
 <div id="product-entries">
     <table>

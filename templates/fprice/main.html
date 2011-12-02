@@ -1,6 +1,6 @@
 {% extends "fprice/base_price.html" %}
 
-{% load seo_tags fprice_tags %}
+{% load seo_tags fprice_tags mptt_tags %}
 
 {% block title %}{% seo title for flatpage as seo_title %}{% if seo_title %}{{ seo_title }}{% else %}{{ flatpage.title }}{% endif %}{% endblock %}
 
@@ -15,12 +15,23 @@
 {% block content %}
 {{ flatpage.content }}
 
-<h2>Каталог товаров</h2>{% get_latest fprice.ProductCategory 999 as category_list %}
+<h2>Каталог товаров</h2>
 
 <div id="product-categories">
-<ul>{% for cat in category_list %}
-    <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
-{% endfor %}</ul>
+
+<ul class="product-cat">{% full_tree_for_model fprice.ProductCategory as nodes %}
+    {% recursetree nodes %}
+        <li>
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
 </div>
 
 <h2>Обновления цен</h2>

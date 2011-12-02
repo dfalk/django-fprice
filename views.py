@@ -30,9 +30,10 @@ def product_list(request, page=0, template_name='fprice/product_list.html', **kw
 
 def product_category(request, slug, page=0, template_name='fprice/product_list.html', **kwargs):
     category = ProductCategory.objects.get(slug=slug)
+    subcategories = category.get_children()
     return list_detail.object_list(
         request,
-        queryset = Product.objects.filter(category=category),
+        queryset = Product.objects.filter(category__in=subcategories),
         paginate_by = 30,
         page = page,
         template_name = template_name,
