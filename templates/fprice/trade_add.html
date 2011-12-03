@@ -50,9 +50,10 @@ th { text-align: left; }
     <table id="tradeform">
         <thead>
             <tr>
-                <th scope="col">Продукт (название, тип, параметры, производитель, упаковка)</th>
-                <th scope="col">Цена (за 1 ед.)</th>
+                <th scope="col">Продукт<br />(название, тип, параметры, производитель, упаковка)</th>
+                <th scope="col">Цена<br />(за 1 ед.)</th>
                 <th scope="col">Количество</th>
+                <th scope="col">Стоимость</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,8 @@ th { text-align: left; }
                 <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
                 <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
                 <td>{{ form.amount.errors }}{{ form.amount }}</td>
+                <td></td>
+                <td></td>
              </tr>
         {% endfor %}
         </tbody>
@@ -73,13 +76,37 @@ th { text-align: left; }
 
 <script type="text/javascript">
 $(document).ready(function(){
+    function SummaryCalc(){
+    // подсчет общей суммы чека
+        sum = 0;
+        $('#tradeform tbody tr').each(function(){
+            var cost = parseFloat($('td:eq(1) input',this).val());
+            cost = isNaN(cost) ? 0 : cost;
+            var col = parseFloat($('td:eq(2) input',this).val());
+            col = isNaN(col) ? 0 : col;
+            sum += cost * col;
+        });
+        $("#id_summary").val(sum.toFixed(2));
+    };
+    function CostCalc(table){
+        var cost = parseFloat(table.children('td:eq(1)').children('input').val());
+        cost = isNaN(cost) ? 0 : cost;
+        var col = parseFloat(table.children('td:eq(2)').children('input').val());
+        col = isNaN(col) ? 0 : col;
+        var sum = cost * col;
+        
+        return sum.toFixed(2);
+    }
+    
     $("#tradeform tbody tr").formset({
         added: function(row) {
             row.find('td:first input').addClass("ac");
             row.find('td input[name$="price_visual"]').addClass("blur_replace");
             row.find('td input[name$="amount"]').addClass("blur_replace");
             setAc();
-        }
+        },
+        addText: "Добавить",
+        deleteText: "Удалить"
     });
 
     $("#tradeform tbody tr td:first input").addClass("ac");
@@ -123,6 +150,9 @@ $(document).ready(function(){
         },
         minLength: 1,
     });
+    $( "#id_summary" ).blur(function(){
+        $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+    });
 
     function setAc(){
         $( ".ac" ).autocomplete({
@@ -164,7 +194,10 @@ $(document).ready(function(){
             minLength: 1,
         });
         $( ".blur_replace" ).blur(function(){
-                $(this).val($(this).val().replace(',','.'));
+            $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+            SummaryCalc();
+            var table = $(this).parent().parent();
+            table.children('td:eq(3)').html(CostCalc(table));
         });
     };
     setAc();
