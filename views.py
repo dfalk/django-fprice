@@ -123,6 +123,7 @@ def summary_list(request, page=0, template_name='fprice/summary_list.html', **kw
 @login_required
 def summary_detail(request, summary_id, page=0, template_name='fprice/summary_detail.html', **kwargs):
     summary = Summary.objects.get(id=summary_id)
+    # TODO: check user
     return list_detail.object_list(
         request,
         queryset = Trade.objects.filter(summary=summary),
