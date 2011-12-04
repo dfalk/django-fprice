@@ -255,7 +255,7 @@ def trade_add(request, **kwargs):
                         new_trade.save()
                         form.save_m2m()
 
-            return HttpResponseRedirect(reverse('price_trade_list'))
+            return HttpResponseRedirect(reverse('price_summary_list'))
     else:
         forma = TitleForm()
         formset = TradeFormSet()
