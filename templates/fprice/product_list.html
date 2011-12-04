@@ -3,13 +3,19 @@
 
 {% block title %}Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %} - {% if category %}<a href="{% url price_product_list %}">Товары</a> - Категория{% else %}Товары{% endif %}{% endblock %}
+{% block breadcrumbs %}
+ - {% if category %}<a href="{% url price_product_list %}">Товары</a>{% else %}Товары{% endif %}{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
+{% endfor %}{% if category %} - {{ category }}{% endif %}
+{% endblock %}
 
 {% block contentclass %}price{% endblock %}
 
 {% block content %}
 <h1>Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %}</h1>
 
+{% if children|length > 0 %}<div id="children">
+{% for ch in children %}<a href="{{ ch.get_absolute_url }}">{{ ch }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+</div> <br />{% endif %}
 <div id="product-entries">
     <table>
     {% for item in object_list %}

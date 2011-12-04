@@ -26,30 +26,33 @@ def search(request):
     return list_detail.object_list(request, queryset=results, paginate_by=30)
 
 def product_list(request, page=0, template_name='fprice/product_list.html', **kwargs):
-    categories = ProductCategory.objects.all()
+    children = ProductCategory.objects.filter(parent__isnull=True)
     return list_detail.object_list(
         request,
         queryset = Product.objects.all(),
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'categories':categories},
+        extra_context = {'children':children},
         **kwargs)
 
 def product_category(request, slug, page=0, template_name='fprice/product_list.html', **kwargs):
     category = ProductCategory.objects.get(slug=slug)
     subcategories = category.get_descendants(include_self=True)
+    categories = category.get_ancestors()
+    children = category.get_children()
     return list_detail.object_list(
         request,
         queryset = Product.objects.filter(category__in=subcategories),
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'category':category},
+        extra_context = {'category':category,'categories':categories,'children':children},
         **kwargs)
 
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
+    categories = product.category.get_ancestors()
     price_param = product_id
     price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT product_id AS pid, shop_id AS sid, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING product_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.pid = fp.product_id AND fmax.sid = fp.shop_id AND fmax.maxtime = fp.last_time_update) as ffull LEFT JOIN fprice_shop AS fs ON ffull.shop_id = fs.id', [price_param])
     return list_detail.object_list(
@@ -58,7 +61,7 @@ def product_detail(request, product_id, page=0, template_name='fprice/product_de
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'product':product, 'price_list':price_list},
+        extra_context = {'product':product, 'price_list':price_list, 'categories':categories},
         **kwargs)
 
 def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):

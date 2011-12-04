@@ -13,6 +13,11 @@
 {% block contentclass %}price{% endblock %}
 
 {% block content %}
+<div id="categories">
+{% for cate in categories %}
+<a href="{{ cate.get_absolute_url }}">{{ cate }}</a>{% if not forloop.last %} - {% endif %}
+{% endfor %}</div>
+
 <h1>Цены на {{ product.title }}</h1>
 
 <div id="favorite-product"><p>{% if product|is_favorite:user %}[<a href="{% url_delete_from_favorites_confirmation 'favorites' product %}">удалить из избранного</a>]{% else %}[<a href="{% url_add_to_favorites product %}">добавить в избранное</a>]{% endif %}</p></div>
