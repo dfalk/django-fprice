@@ -4,13 +4,22 @@
 
 {% block extrahead %}
 {{ block.super }}
-<link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />    
+<link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.formset.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-timepicker-addon.js"></script>
 
 <style>
 th { text-align: left; }
+
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; }
+.ui-timepicker-div dl dd { margin: -25px 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+.ui-datepicker-header { border: 1px solid #555555; background: #BBBBBB;}
 </style>
 {% endblock %}
 
@@ -24,7 +33,6 @@ th { text-align: left; }
     {{ forma.shop }}
     <div><p>{{ forma.spytrade.errors }}
     {{ forma.spytrade }} <b>Режим цен</b> (данные не будут вносится в ваши покупки)</p></div>
-    
     <table id="titleform">
         <thead>
             <tr>
@@ -76,19 +84,28 @@ th { text-align: left; }
 
 <script type="text/javascript">
 $(document).ready(function(){
+    $('#id_time').datetimepicker({
+        showSecond: true,
+        timeFormat: 'hh:mm:ss',
+        stepHour: 1,
+        stepMinute: 1,
+        stepSecond: 10,
+        hour: 12,
+        minute: 00,
+        dateFormat: 'dd.mm.yy',
+    });
     function SummaryCalc(){
     // подсчет общей суммы чека
         sum = 0;
         $('#tradeform tbody tr').each(function(){
-            var cost = parseFloat($('td:eq(1) input',this).val());
+            var cost = parseFloat($('td:eq(3)',this).html());
             cost = isNaN(cost) ? 0 : cost;
-            var col = parseFloat($('td:eq(2) input',this).val());
-            col = isNaN(col) ? 0 : col;
-            sum += cost * col;
+            sum += cost;
         });
         $("#id_summary").val(sum.toFixed(2));
     };
     function CostCalc(table){
+    // подсчет текущей стоимости
         var cost = parseFloat(table.children('td:eq(1)').children('input').val());
         cost = isNaN(cost) ? 0 : cost;
         var col = parseFloat(table.children('td:eq(2)').children('input').val());
@@ -195,13 +212,12 @@ $(document).ready(function(){
         });
         $( ".blur_replace" ).blur(function(){
             $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
-            SummaryCalc();
             var table = $(this).parent().parent();
             table.children('td:eq(3)').html(CostCalc(table));
+            SummaryCalc();
         });
     };
     setAc();
-
 });
 </script>
 
