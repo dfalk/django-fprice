@@ -29,23 +29,23 @@ def get_latest(parser, token):
     return LatestContentNode(bits[1], bits[2], bits[4])
 get_latest = register.tag(get_latest)
 
-class LatestCountNode(Node):
+class LatestCounterNode(Node):
     def __init__(self, model, num, varname):
-        self.num, self.varname = num, varname
+        self.num, self.varname = int(num), varname
         self.model = get_model(*model.split('.'))
         
     def render(self, context):
-        context[self.varname] = self.model._default_manager.filter(time_added__gt=datetime.datetime.now()-datetime.timedelta(days=self.num))
+        context[self.varname] = self.model._default_manager.filter(time_added__gt=datetime.datetime.now()-datetime.timedelta(days=self.num)).count()
         return ''
 
-def get_count(parser, token):
+def get_counter(parser, token):
     """
-    Usage: {% get_count <app.model> <days> as <var> %}
+    Usage: {% get_counter <app.model> <days> as <var> %}
     """
     bits = token.contents.split()
     if len(bits) != 5:
-        raise TemplateSyntaxError, "get_count tag takes exactly four arguments"
+        raise TemplateSyntaxError, "get_counter tag takes exactly four arguments"
     if bits[3] != 'as':
-        raise TemplateSyntaxError, "third argument to get_latest tag must be 'as'"
-    return LatestContentNode(bits[1], bits[2], bits[4])
-get_count = register.tag(get_count)
+        raise TemplateSyntaxError, "third argument to get_counter tag must be 'as'"
+    return LatestCounterNode(bits[1], bits[2], bits[4])
+get_counter = register.tag(get_counter)

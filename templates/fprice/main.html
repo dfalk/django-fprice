@@ -20,11 +20,11 @@
 <h2>Обновления</h2>
 
 <div id="price-updates">
-<p>Цены за сутки/неделю/месяц: <b>{% get_count fprice.Price 1 as price_count1 %}{{ price_count1.count }}</b>
-/ <b>{% get_count fprice.Price 7 as price_count7 %}{{ price_count7.count }}</b>
-/ <b>{% get_count fprice.Price 30 as price_count30 %}{{ price_count30.count }}</b>
+<p>Цены за сутки/неделю/месяц: <b>{% get_counter fprice.Price 1 as price_count1 %}{{ price_count1 }}</b>
+/ <b>{% get_counter fprice.Price 7 as price_count7 %}{{ price_count7 }}</b>
+/ <b>{% get_counter fprice.Price 30 as price_count30 %}{{ price_count30 }}</b>
 </p>
-<p>Покупки за сутки/неделю/месяц: <b>{% get_count fprice.Summary 1 as sum_count1 %}{{ sum_count1.count }}</b> / <b>{% get_count fprice.Summary 7 as sum_count7 %}{{ sum_count7.count }}</b> / <b>{% get_count fprice.Summary 30 as sum_count30 %}{{ sum_count30.count }}</b></p>
+<p>Покупки за сутки/неделю/месяц: <b>{% get_counter fprice.Summary 1 as sum_count1 %}{{ sum_count1 }}</b> / <b>{% get_counter fprice.Summary 7 as sum_count7 %}{{ sum_count7 }}</b> / <b>{% get_counter fprice.Summary 30 as sum_count30 %}{{ sum_count30 }}</b></p>
 </div><!-- /#price-updates -->
 
 <div id="trade-add">
