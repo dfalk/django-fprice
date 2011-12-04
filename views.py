@@ -88,6 +88,7 @@ def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html
 
 def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
+    categories = product.category.get_ancestors()
     shop = Shop.objects.get(id=shop_id)
     shop_list = Shop.objects.filter(pk=shop_id)
     return list_detail.object_list(
@@ -96,7 +97,7 @@ def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'shop':shop, 'product':product, 'shop_list':shop_list},
+        extra_context = {'shop':shop, 'product':product, 'shop_list':shop_list, 'categories':categories},
         **kwargs)
 
 @staff_member_required

@@ -8,7 +8,10 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
 {% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_index %}">Цены</a> - <a href="{{ product.get_absolute_url }}">Продукт</a> - В магазине{% endblock %}
+{% block breadcrumbs %}
+ - <a href="{% url price_product_list %}">Товары</a>{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
+{% endfor %} - <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a> - Продукт в магазине</a>
+{% endblock %}
 
 {% block contentclass %}prodshop{% endblock %}
 
