@@ -1,6 +1,6 @@
 {% extends "fprice/base_price.html" %}
 
-{% load seo_tags fprice_tags mptt_tags %}
+{% load seo_tags fprice_tags %}
 
 {% block title %}{% seo title for flatpage as seo_title %}{% if seo_title %}{{ seo_title }}{% else %}{{ flatpage.title }}{% endif %}{% endblock %}
 
@@ -15,39 +15,22 @@
 {% block content %}
 {{ flatpage.content }}
 
-<h2>Каталог товаров</h2>
+<p><a href="{% url price_index %}">Изучить цены на товары</a></p>
 
-<div id="product-categories">
+<h2>Обновления</h2>
 
-<ul class="product-cat">{% full_tree_for_model fprice.ProductCategory as nodes %}
-    {% recursetree nodes %}
-        <li>
-            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-            {% if not node.is_leaf_node %}
-                <ul class="children">
-                    {{ children }}
-                </ul>
-            {% endif %}
-        </li>
-    {% endrecursetree %}
-</ul>
-
-</div>
-
-<h2>Обновления цен</h2>
+<div id="price-updates">
+<p>Цены за сутки/неделю/месяц: <b>{% get_count fprice.Price 1 as price_count1 %}{{ price_count1.count }}</b>
+/ <b>{% get_count fprice.Price 7 as price_count7 %}{{ price_count7.count }}</b>
+/ <b>{% get_count fprice.Price 30 as price_count30 %}{{ price_count30.count }}</b>
+</p>
+<p>Покупки за сутки/неделю/месяц: <b>{% get_count fprice.Summary 1 as sum_count1 %}{{ sum_count1.count }}</b> / <b>{% get_count fprice.Summary 7 as sum_count7 %}{{ sum_count7.count }}</b> / <b>{% get_count fprice.Summary 30 as sum_count30 %}{{ sum_count30.count }}</b></p>
+</div><!-- /#price-updates -->
 
 <div id="trade-add">
 <p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
 </div>
 
-<div id="price-entries">{% get_latest fprice.Price 12 as price_list %}
-    <table>
-    {% for item in price_list %}
-        <tr><td><i>{{ item.last_time_update|date:"Y, j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.price }}</b></td><td>{{ item.get_currency_display }}</td><td><a title="{{ item.shop.title }}" href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product }}</a></td></tr>
-    {% endfor %}
-    </table>
-<p><a href="{% url price_index %}">Полный список цен</a></p>
-</div><!-- /#price-entries -->
 
 {% if is_paginated %}<div class="pagination">Страницы:
     {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}

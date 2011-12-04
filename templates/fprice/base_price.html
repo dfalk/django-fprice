@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load mptt_tags %}
+
 {% block title %}Цены говорят{% endblock %}
 
 {% block extrahead %}
@@ -8,8 +10,27 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 {% endblock %}
 
-
 {% block breadcrumbs %} - Цены{% endblock %}
+
+{% block mainbar %}
+<div id="product-categories">
+
+<h2>Каталог товаров</h2>
+<ul class="product-cat">{% full_tree_for_model fprice.ProductCategory as nodes %}
+    {% recursetree nodes %}
+        <li>
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
+</div>
+{% endblock %}
 
 {% block sidebar %}
 <!--<h2>Меню прайсов</h2>-->

@@ -60,7 +60,7 @@ th { text-align: left; }
             <tr>
                 <th scope="col">Продукт<br />(название, тип, параметры, производитель, упаковка)</th>
                 <th scope="col">Цена<br />(за 1 ед.)</th>
-                <th scope="col">Количество</th>
+                <th scope="col">Кол-во</th>
                 <th scope="col">Стоимость</th>
             </tr>
         </thead>
@@ -70,13 +70,13 @@ th { text-align: left; }
                 <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
                 <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
                 <td>{{ form.amount.errors }}{{ form.amount }}</td>
-                <td></td>
+                <td>0</td>
                 <td></td>
              </tr>
         {% endfor %}
         </tbody>
     </table>
-    <div style="width: 676px; text-align: right"><b>Общая сумма</b> {{ forma.summary.errors }}{{ forma.summary }}</div>
+    <div style="width: 606px; text-align: right"><b>Общая сумма</b> {{ forma.summary.errors }}{{ forma.summary }}</div>
     {{ formset.management_form }}
     <br />
     <input type="submit" value="Сохранить" />
@@ -122,8 +122,8 @@ $(document).ready(function(){
             row.find('td input[name$="amount"]').addClass("blur_replace");
             setAc();
         },
-        addText: "Добавить",
-        deleteText: "Удалить"
+        addText: "Добавить строку",
+        deleteText: "X"
     });
 
     $("#tradeform tbody tr td:first input").addClass("ac");

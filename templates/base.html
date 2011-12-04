@@ -51,6 +51,10 @@
 <div id="main">
 {% block main %}
 
+<div id="mainbar" class="rounded">
+{% block mainbar %}{% endblock %}
+</div><!-- /#mainbar -->
+
 <div id="content" class="{% block contentclass %}{% endblock %} rounded">
 {% block content %}{% endblock %}
 </div><!-- /#content -->

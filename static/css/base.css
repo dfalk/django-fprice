@@ -98,18 +98,26 @@ body {
     background: #ccc;
 }
 
+#mainbar {
+    background: #ddd;
+    width: 144px;
+    float: left;
+    margin-right: 4px;
+    padding: 10px;
+}
+
 #content {
     background: #ddd;
-    width: 704px;
+    width: 604px;
     float: left;
+    margin-right: 4px;
     padding: 10px;
 }
 
 #sidebar {
     background: #ddd;
-    width: 212px;
-    float: right;
-    margin-left: 4px;
+    width: 144px;
+    float: left;
     padding: 10px;
 }
 
@@ -171,6 +179,19 @@ h5 {
 #id_comment {
     width: 98%;
     height: 60px;
+}
+
+/* =========================== MAINBAR ========================== */
+
+#mainbar .product-cat {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+#mainbar .product-cat ul {
+    margin-left: 14px;
+    padding: 0px;
 }
 
 /* =========================== SIDEBAR ========================== */
