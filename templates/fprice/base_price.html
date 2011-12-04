@@ -7,7 +7,10 @@
 {% block extrahead %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fprice.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.treeview.css" />
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.treeview.js"></script>
 {% endblock %}
 
 {% block breadcrumbs %} - Цены{% endblock %}
@@ -28,7 +31,15 @@
         </li>
     {% endrecursetree %}
 </ul>
-
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".product-cat").treeview({
+        collapsed: true,
+        unique: true,
+        persist: "location"
+	});
+});
+</script>
 </div>
 {% endblock %}
 
