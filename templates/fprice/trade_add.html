@@ -69,7 +69,7 @@ th { text-align: left; }
                 <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
                 <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
                 <td>{{ form.amount.errors }}{{ form.amount }}</td>
-                <td>0</td>
+                <td><input class="blur_replace_cost" type="text" size="5" value=0.00></td>
                 <td></td>
              </tr>
         {% endfor %}
@@ -84,8 +84,7 @@ th { text-align: left; }
 <script type="text/javascript">
 $(document).ready(function(){
     $('#id_time').datetimepicker({
-        showSecond: true,
-        timeFormat: 'hh:mm:ss',
+        timeFormat: 'hh:mm',
         stepHour: 1,
         stepMinute: 1,
         stepSecond: 10,
@@ -97,7 +96,7 @@ $(document).ready(function(){
     // подсчет общей суммы чека
         sum = 0;
         $('#tradeform tbody tr').each(function(){
-            var cost = parseFloat($('td:eq(3)',this).html());
+            var cost = parseFloat($('td:eq(3) input',this).val());
             cost = isNaN(cost) ? 0 : cost;
             sum += cost;
         });
@@ -110,6 +109,16 @@ $(document).ready(function(){
         var col = parseFloat(table.children('td:eq(2)').children('input').val());
         col = isNaN(col) ? 0 : col;
         var sum = cost * col;
+        
+        return sum.toFixed(2);
+    }
+    function PriceCalc(table){
+    // подсчет текущей цены
+        var cost = parseFloat(table.children('td:eq(3)').children('input').val());
+        cost = isNaN(cost) ? 0 : cost;
+        var col = parseFloat(table.children('td:eq(2)').children('input').val());
+        col = isNaN(col) ? 0 : col;
+        var sum = cost / col;
         
         return sum.toFixed(2);
     }
@@ -212,7 +221,13 @@ $(document).ready(function(){
         $( ".blur_replace" ).blur(function(){
             $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
             var table = $(this).parent().parent();
-            table.children('td:eq(3)').html(CostCalc(table));
+            table.children('td:eq(3)').children('input').val(CostCalc(table));
+            SummaryCalc();
+        });
+        $( ".blur_replace_cost" ).blur(function(){
+            $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+            var table = $(this).parent().parent();
+            table.children('td:eq(1)').children('input').val(PriceCalc(table));
             SummaryCalc();
         });
     };
