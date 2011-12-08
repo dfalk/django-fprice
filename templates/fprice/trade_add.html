@@ -118,7 +118,7 @@ $(document).ready(function(){
         cost = isNaN(cost) ? 0 : cost;
         var col = parseFloat(table.children('td:eq(2)').children('input').val());
         col = isNaN(col) ? 0 : col;
-        var sum = cost / col;
+        var sum = col ? (cost / col) : 0;
         
         return sum.toFixed(2);
     }
@@ -127,7 +127,7 @@ $(document).ready(function(){
         added: function(row) {
             row.find('td:first input').addClass("ac");
             row.find('td input[name$="price_visual"]').addClass("blur_replace");
-            row.find('td input[name$="amount"]').addClass("blur_replace");
+            row.find('td input[name$="amount"]').addClass("blur_replace_amount");
             setAc();
         },
         addText: "Добавить строку",
@@ -136,7 +136,7 @@ $(document).ready(function(){
 
     $("#tradeform tbody tr td:first input").addClass("ac");
     $('#tradeform tbody tr input[name$="price_visual"]').addClass("blur_replace");
-    $('#tradeform tbody tr input[name$="amount"]').addClass("blur_replace");
+    $('#tradeform tbody tr input[name$="amount"]').addClass("blur_replace_amount");
 
     $("#id_shop_visual").autocomplete({
         //Определяем обратный вызов к результатам форматирования
@@ -176,7 +176,7 @@ $(document).ready(function(){
         minLength: 1,
     });
     $( "#id_summary" ).blur(function(){
-        $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+        $(this).val($(this).val().replace(/\s-/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
     });
 
     function setAc(){
@@ -218,17 +218,41 @@ $(document).ready(function(){
             },
             minLength: 1,
         });
+        // поле цена теряет фокус ввода
         $( ".blur_replace" ).blur(function(){
-            $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+            $(this).val($(this).val().replace(/\s-/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
             var table = $(this).parent().parent();
-            table.children('td:eq(3)').children('input').val(CostCalc(table));
-            SummaryCalc();
+            if (table.children('td:eq(2)').children('input').val() > 0) {
+                table.children('td:eq(3)').children('input').val(CostCalc(table));
+                SummaryCalc();
+            }
         });
-        $( ".blur_replace_cost" ).blur(function(){
-            $(this).val($(this).val().replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+        // поле количество теряет фокус ввода
+        $( ".blur_replace_amount" ).blur(function(){
+            $(this).val($(this).val().replace(/\s-/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
             var table = $(this).parent().parent();
-            table.children('td:eq(1)').children('input').val(PriceCalc(table));
-            SummaryCalc();
+            var price = table.children('td:eq(1)').children('input').val();
+            var cost = table.children('td:eq(3)').children('input').val();
+            if (price > 0) {
+                table.children('td:eq(3)').children('input').val(CostCalc(table));
+                SummaryCalc();
+            }
+            else if (price == 0) {
+                if (cost == 0) return
+                else if (cost > 0) {
+                    table.children('td:eq(1)').children('input').val(PriceCalc(table));
+                    SummaryCalc();
+                }
+            };
+        });
+        // поле стоимость теряет фокус ввода
+        $( ".blur_replace_cost" ).blur(function(){
+            $(this).val($(this).val().replace(/\s-/g, '').replace(/,/g, '.').replace(/[^\d\.]/g, ''));
+            var table = $(this).parent().parent();
+            if (table.children('td:eq(2)').children('input').val() > 0) {
+                table.children('td:eq(1)').children('input').val(PriceCalc(table));
+                SummaryCalc();
+            }
         });
     };
     setAc();
