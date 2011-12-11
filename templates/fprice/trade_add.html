@@ -253,6 +253,9 @@ $(document).ready(function(){
                 table.children('td:eq(1)').children('input').val(PriceCalc(table));
                 SummaryCalc();
             }
+            else if (table.children('td:eq(2)').children('input').val() == 0) {
+                $(this).val(0);
+            }
         });
     };
     setAc();
