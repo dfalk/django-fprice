@@ -7,8 +7,30 @@ import mptt
 from datetime import datetime
 
 
+class City(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return u"%s" % (self.title)
+
+    class Meta:
+        ordering = ["title"]
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    city = models.ForeignKey(City, blank=True, null=True)
+
+    def __unicode__(self):
+        return u"%s" % (self.user)
+
+User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+User.get_profile = lambda u: UserProfile.objects.get_or_create(user=u)[0]
+
+
 class Shop(models.Model):
     title = models.CharField(max_length=200)
+    city = models.ForeignKey(City, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s" % (self.title)

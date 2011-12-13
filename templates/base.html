@@ -42,7 +42,7 @@
     <div id="profile">
         {% if not user.is_authenticated %}<a href="{% url auth_login %}?next={{ request.path }}">Войти</a>{% endif %}
         {% if user.is_staff %}<a href="{% url admin:index %}">Админка</a>{% endif %}
-        {% if user.is_authenticated %}<a href="{% url auth_logout %}?next={{ request.path }}">Выход</a> ({{ user.username }}){% endif %}
+        {% if user.is_authenticated %}<a href="{% url profiles_profile_detail user %}">Профиль</a> <a href="{% url auth_logout %}?next={{ request.path }}">Выход</a> ({{ user.username }}){% endif %}
     </div>
     <div id="breadcrumbs"><a href="/">Главная</a>{% block breadcrumbs %} - Добро пожаловать!{% endblock %}</div>
     <div class="clearfix"></div>

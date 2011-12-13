@@ -6,7 +6,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.views.generic.simple import direct_to_template
 from django.http import HttpResponse, HttpResponseRedirect
-from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
+from fprice.models import City, UserProfile, Shop, ProductCategory, Product, Price, Trade, Summary
 from fprice.forms import TradeForm
 from mptt.admin import MPTTModelAdmin
 
@@ -123,6 +123,8 @@ class PriceAdmin(admin.ModelAdmin):
             obj.user = request.user
         obj.save()
 
+admin.site.register(City)
+admin.site.register(UserProfile)
 admin.site.register(Shop)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, MPTTModelAdmin)
