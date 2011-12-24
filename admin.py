@@ -49,7 +49,7 @@ class ProductAdmin(admin.ModelAdmin):
 class TradeAdmin(admin.ModelAdmin):
     #form = TradeForm
     actions = ['change_summary']
-    list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer']
+    list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer', 'summary']
 
     class SummaryForm(forms.Form):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
@@ -105,8 +105,14 @@ class TradeAdmin(admin.ModelAdmin):
             #obj.price = "%.2f" % ( float(obj.cost) / float(obj.amount) )
         obj.save()
 
+class TradeInline(admin.TabularInline):
+    model = Trade
+
 class SummaryAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'time', 'user', 'shop']
+    inlines = [
+        TradeInline,
+    ]
 
     def save_model(self, request, obj, form, change):
         if not change:
