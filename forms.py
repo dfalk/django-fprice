@@ -20,9 +20,10 @@ class TitleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TitleForm, self).__init__(*args, **kwargs)
-        self.fields['shop_visual'].widget.attrs['size'] = 44
+        self.fields['shop_visual'].widget.attrs['size'] = 50
         self.fields['shop_visual'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['time'].widget.attrs['size'] = 16
+        self.fields['time'].widget.format = '%d.%m.%Y %H:%M'
         self.fields['summary'].widget.attrs['size'] = 10
 
 class TradeForm(forms.ModelForm):
@@ -37,8 +38,8 @@ class TradeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TradeForm, self).__init__(*args, **kwargs)
-        self.fields['product_visual'].widget.attrs['size'] = 44
-        self.fields['price_visual'].widget.attrs['size'] = 8
-        self.fields['amount'].widget.attrs['size'] = 4
+        self.fields['product_visual'].widget.attrs['size'] = 50
+        self.fields['price_visual'].widget.attrs['size'] = 10
+        self.fields['amount'].widget.attrs['size'] = 9
 
 TradeFormSet = formset_factory(TradeForm)
