@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
                 return HttpResponseRedirect(request.get_full_path())
         if not form:
             form = self.CategoryForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
-        return direct_to_template(request, 'admin/set_category.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
+        return direct_to_template(request, 'fprice/admin_set_category.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
 
     change_category.short_description = 'Set category'
 
@@ -85,7 +85,7 @@ class TradeAdmin(admin.ModelAdmin):
                 return HttpResponseRedirect(request.get_full_path())
         if not form:
             form = self.SummaryForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
-        return direct_to_template(request, 'admin/set_summary.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
+        return direct_to_template(request, 'fprice/admin_set_summary.html', {'items': queryset, 'form': form, 'path':request.get_full_path()})
 
     change_summary.short_description = 'Set summary'
 
