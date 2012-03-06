@@ -10,7 +10,6 @@ setup(
     author_email='dfalk@gmail.com',
     packages=find_packages(),
     include_package_data = True,
-    # TODO ? templates and static
     # TODO install_requires=[''],
 )
 

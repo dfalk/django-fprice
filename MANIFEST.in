@@ -1,0 +1,4 @@
+include README
+recursive-include fprice/static *.*
+recursive-include fprice/templates/fprice *.html
+exclude .gitignore
