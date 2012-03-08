@@ -1,1 +1,17 @@
 Price app for Django
+
+
+Static requirements (included):
+
+- jquery
+- jquery ui autocomplete
+- jquery ui datetimepicker
+- jquery flot
+
+
+Base template requirements (docs/base.html.example):
+
+- block extrahead (for custom js/css)
+- block title (head title)
+- block breadcrumbs
+- block content

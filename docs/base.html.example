@@ -31,7 +31,6 @@
     <ul>
     <li><a href="/products/">Товары</a></li>
     <li><a href="/shops/">Магазины</a></li>
-    <li><a href="/blog/">Блог</a></li>
     <li><a href="/about/">О проекте</a></li>
     </ul>
 </div>
@@ -76,22 +75,6 @@
 {% endblock %}
 </div><!-- /#infobar footer -->
 
-<div id="counters">
-<!-- Yandex.Metrika informer -->
-<a href="http://metrika.yandex.ru/stat/?id=10825897&amp;from=informer"
-target="_blank" rel="nofollow"><img src="//bs.yandex.ru/informer/10825897/3_0_DFDFDFFF_BFBFBFFF_0_pageviews"
-style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" onclick="try{Ya.Metrika.informer({i:this,id:10825897,type:0,lang:'ru'});return false}catch(e){}"/></a>
-<!-- /Yandex.Metrika informer -->
-
-<!-- Yandex.Metrika counter -->
-<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
-<div style="display:none;"><script type="text/javascript">
-try { var yaCounter10825897 = new Ya.Metrika({id:10825897,
-          accurateTrackBounce:true});}
-catch(e) { }
-</script></div>
-<noscript><div><img src="//mc.yandex.ru/watch/10825897" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 </div>
 
 </body>
