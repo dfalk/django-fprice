@@ -84,13 +84,13 @@ th { text-align: left; }
 <script type="text/javascript">
 $(document).ready(function(){
     $('#id_time').datetimepicker({
-        timeFormat: 'hh:mm',
+        timeFormat: 'hh:mm:ss',
         stepHour: 1,
         stepMinute: 1,
         stepSecond: 10,
         hour: 12,
         minute: 00,
-        dateFormat: 'dd.mm.yy',
+        dateFormat: 'yy-mm-dd',
     });
     function SummaryCalc(){
     // подсчет общей суммы чека

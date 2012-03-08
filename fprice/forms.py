@@ -23,7 +23,7 @@ class TitleForm(forms.ModelForm):
         self.fields['shop_visual'].widget.attrs['size'] = 50
         self.fields['shop_visual'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['time'].widget.attrs['size'] = 16
-        self.fields['time'].widget.format = '%d.%m.%Y %H:%M'
+        self.fields['time'].widget.format = '%Y-%m-%d %H:%M:%S'
         self.fields['summary'].widget.attrs['size'] = 10
 
 class TradeForm(forms.ModelForm):
