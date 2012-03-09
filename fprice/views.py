@@ -52,7 +52,10 @@ def product_category(request, slug, page=0, template_name='fprice/product_list.h
 
 def product_detail(request, product_id, page=0, template_name='fprice/product_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
-    categories = product.category.get_ancestors()
+    try:
+        categories = product.category.get_ancestors()
+    except:
+        categories = None
     price_param = product_id
     price_list = Price.objects.raw('SELECT * FROM (SELECT * FROM (SELECT product_id AS pid, shop_id AS sid, MAX(last_time_update) as maxtime FROM fprice_price GROUP BY product_id, shop_id HAVING product_id = %s) as fmax LEFT JOIN fprice_price as fp ON fmax.pid = fp.product_id AND fmax.sid = fp.shop_id AND fmax.maxtime = fp.last_time_update) as ffull LEFT JOIN fprice_shop AS fs ON ffull.shop_id = fs.id', [price_param])
     return list_detail.object_list(
@@ -88,7 +91,10 @@ def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html
 
 def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
-    categories = product.category.get_ancestors()
+    try:
+        categories = product.category.get_ancestors()
+    except:
+        categories = None
     shop = Shop.objects.get(id=shop_id)
     shop_list = Shop.objects.filter(pk=shop_id)
     return list_detail.object_list(
