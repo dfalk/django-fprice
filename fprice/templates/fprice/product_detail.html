@@ -1,5 +1,5 @@
 {% extends "fprice/base_price.html" %}
-{% load comments markup favorites_tags %}
+{% load comments markup %}
 
 {% block title %}Цены на {{ product.title }} | {{ block.super }}{% endblock %}
 
@@ -17,8 +17,6 @@
 
 {% block content %}
 <h1>Цены на {{ product.title }}</h1>
-
-<div id="favorite-product"><p>{% if product|is_favorite:user %}[<a href="{% url_delete_from_favorites_confirmation 'favorites' product %}">удалить из избранного</a>]{% else %}[<a href="{% url_add_to_favorites product %}">добавить в избранное</a>]{% endif %}</p></div>
 
 <script type="text/javascript">
 $(document).ready(function() {
