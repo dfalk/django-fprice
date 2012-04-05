@@ -8,7 +8,11 @@ from datetime import datetime
 
 
 class City(models.Model):
+
+    # Named
     title = models.CharField(max_length=100)
+
+    # TODO Country field
 
     def __unicode__(self):
         return u"%s" % (self.title)
@@ -29,7 +33,11 @@ User.get_profile = lambda u: UserProfile.objects.get_or_create(user=u)[0]
 
 
 class Shop(models.Model):
+
+    # Named
     title = models.CharField(max_length=200)
+
+    # Core
     city = models.ForeignKey(City, blank=True, null=True)
 
     def __unicode__(self):
@@ -44,11 +52,18 @@ class Shop(models.Model):
 
 
 class ProductCategory(models.Model):
+
+    # Named
     title = models.CharField(max_length=50)
     slug = models.SlugField(unique=True, max_length=50)
+
+    # Content
     description = models.TextField(blank=True)
+
+    # Orderable
     position = models.PositiveIntegerField(default=0)
 
+    # Hierarchy
     parent = models.ForeignKey('self', null=True, blank=True,
                                related_name='children')
 
@@ -57,14 +72,13 @@ class ProductCategory(models.Model):
 
     @property
     def tree_path(self):
-        """Return category's tree path, by his ancestors"""
+        # TODO Return category's tree path, by his ancestors
         #if self.parent:
         #    return '%s/%s' % (self.parent.tree_path, self.slug)
         return self.slug
 
     @models.permalink
     def get_absolute_url(self):
-        """Return category's URL"""
         return ('price_product_category', (self.tree_path,))
 
     class Meta:
@@ -73,6 +87,7 @@ class ProductCategory(models.Model):
 mptt.register(ProductCategory, order_insertion_by=['title'])
 
 
+# Not used
 UNIT_CHOICES = (
     ('sh', 'шт'),
     ('kg', 'кг'),
@@ -81,10 +96,16 @@ UNIT_CHOICES = (
     ('gr', 'гр'),
 )
 
+
 class Product(models.Model):
+    '''
+    List of products.
+    '''
+
     title = models.CharField(max_length=200)
     category = models.ForeignKey(ProductCategory, null=True, blank=True)
     description = models.TextField(blank=True)
+    # TODO producer field
 
     def __unicode__(self):
         return u"%s" % (self.title)
@@ -104,16 +125,26 @@ CURR_CHOICES = (
 )
 
 class Price(models.Model):
-    user = models.ForeignKey(User)
+    '''
+    Core model.
+    Price log for products via shops.
+    '''
+
+    # Authored
+    user = models.ForeignKey('User')
+
+    # Time-stamped
     time = models.DateTimeField(default=datetime.now)
     time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
 
-    last_user_update = models.ForeignKey(User, related_name="last_user_update")
+    # Updateable
+    last_user_update = models.ForeignKey('User', related_name="last_user_update")
     last_time_update = models.DateTimeField(default=datetime.now)
     update_counter = models.IntegerField(default=0)
 
-    shop = models.ForeignKey(Shop)
-    product = models.ForeignKey(Product)
+    # Core
+    shop = models.ForeignKey('Shop')
+    product = models.ForeignKey('Product')
     price = models.DecimalField(max_digits=19, decimal_places=2)
     currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
 
@@ -125,11 +156,19 @@ class Price(models.Model):
 
 
 class Summary(models.Model):
-    user = models.ForeignKey(User)
+    '''
+    Summary cost for trade.
+    '''
+
+    # Authored
+    user = models.ForeignKey('User')
+
+    # Time-stamped
     time = models.DateTimeField(default=datetime.now)
     time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
 
-    shop = models.ForeignKey(Shop, blank=True, null=True)
+    # Core
+    shop = models.ForeignKey('Shop', blank=True, null=True)
     summary = models.DecimalField(max_digits=19, decimal_places=2)
     currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
 
@@ -141,6 +180,10 @@ class Summary(models.Model):
         return ('fprice.views.summary_detail',[unicode(self.id)])
 
     def get_abs_summary(self):
+        '''
+        Get absolute summary suitable for display needs.
+        '''
+
         return u"%.2f" % (abs(self.summary))
     get_abs_summary.short_description = "Absolute summary"
 
@@ -149,14 +192,22 @@ class Summary(models.Model):
 
 
 class Trade(models.Model):
-    customer = models.ForeignKey(User)
+    '''
+    It's contain details for Summary.
+    '''
+
+    # Authored
+    customer = models.ForeignKey('User')
+
+    # Time-stamped
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
     time_added = models.DateTimeField(default=datetime.now,editable=False)
 
-    price = models.ForeignKey(Price)
+    # Core
+    price = models.ForeignKey('Price')
     amount = models.FloatField()
     cost = models.DecimalField(max_digits=12, decimal_places=2)
-    summary = models.ForeignKey(Summary, blank=True, null=True)
+    summary = models.ForeignKey('Summary', blank=True, null=True) # TODO it's must be required field
 
     def __unicode__(self):
         return u"%s - %s" % (self.price.product, self.amount)
