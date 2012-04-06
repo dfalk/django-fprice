@@ -7,3 +7,29 @@
 .prodshop h1 a, a:visited {
     text-decoration: underline;
 }
+
+/* ============================ FORM =============================== */
+
+#id_shop_visual {
+    width: 350px;
+}
+
+#id_time {
+    width: 140px;
+}
+
+#id_summary {
+    width: 80px;
+}
+
+#id_form-0-product_visual {
+    width: 350px;
+}
+
+#id_form-0-price_visual {
+    width: 80px;
+}
+
+#id_form-0-amount {
+    width: 50px;
+}
