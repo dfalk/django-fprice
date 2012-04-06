@@ -47,6 +47,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class TradeAdmin(admin.ModelAdmin):
+    '''
+    Deprecated.
+    '''
     #form = TradeForm
     actions = ['change_summary']
     list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer', 'summary']
@@ -89,15 +92,6 @@ class TradeAdmin(admin.ModelAdmin):
 
     change_summary.short_description = 'Set summary'
 
-    def make_spy(self, request, queryset):
-        rows_updated = queryset.update(spytrade=True)
-        #if rows_updated == 1:
-        # message_bit = "1 покупка была"
-        #else:
-        # message_bit = "%s покупок было" % rows_updated
-        #self.message_user(request, "%s отмечено как подсмотренные." % message_bit)
-    make_spy.short_description = 'Mark as spy'
-
     def save_model(self, request, obj, form, change):
         if not change:
             obj.customer = request.user
@@ -134,6 +128,6 @@ admin.site.register(UserProfile)
 admin.site.register(Shop)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, MPTTModelAdmin)
-admin.site.register(Trade, TradeAdmin)
+#admin.site.register(Trade, TradeAdmin)
 admin.site.register(Summary, SummaryAdmin)
 admin.site.register(Price, PriceAdmin)

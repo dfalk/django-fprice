@@ -4,7 +4,7 @@
 from django.db import models
 from django import forms
 from django.forms.formsets import formset_factory
-from fprice.models import Trade, Shop, CURR_CHOICES
+from fprice.models import Summary, Trade, Shop, CURR_CHOICES
 import datetime
 
 class TitleForm(forms.ModelForm):
@@ -15,7 +15,7 @@ class TitleForm(forms.ModelForm):
     summary = forms.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
-        model = Trade
+        model = Summary
         fields = ('spytrade', 'time', 'shop_visual')
 
     def __init__(self, *args, **kwargs):

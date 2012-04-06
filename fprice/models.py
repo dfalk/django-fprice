@@ -198,11 +198,11 @@ class Trade(models.Model):
     '''
 
     # Authored
-    customer = models.ForeignKey(User)
+    #customer = models.ForeignKey(User)
 
     # Time-stamped
-    time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
-    time_added = models.DateTimeField(default=datetime.now,editable=False)
+    #time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
+    #time_added = models.DateTimeField(default=datetime.now,editable=False)
 
     # Core
     price = models.ForeignKey('Price')
@@ -218,5 +218,5 @@ class Trade(models.Model):
     get_price.short_description = "Price"
 
     class Meta:
-        ordering = ["-time"]
+        ordering = ["id"]
 
