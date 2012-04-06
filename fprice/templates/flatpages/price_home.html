@@ -1,12 +1,8 @@
 {% extends "fprice/base_price.html" %}
 
-{% load seo_tags fprice_tags %}
+{% load fprice_tags %}
 
-{% block title %}{% seo title for flatpage as seo_title %}{% if seo_title %}{{ seo_title }}{% else %}{{ flatpage.title }}{% endif %}{% endblock %}
-
-{% block description %}{% seo description for flatpage %}{% endblock %}
-
-{% block keywords %}{% seo keywords for flatpage %}{% endblock %}
+{% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block breadcrumbs %}Добро пожаловать!{% endblock %}
 
@@ -29,11 +25,5 @@
 <div id="trade-add">
 <p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
 </div>
-
-{% if is_paginated %}<div class="pagination">Страницы:
-    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
-    <span class="page-position">{{ page }}/{{ pages }}</span>
-    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
-</div>{% endif %}
 
 {% endblock %}
