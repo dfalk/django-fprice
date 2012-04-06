@@ -4,7 +4,7 @@
 
 {% block title %}Цены говорят{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fprice.css" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.treeview.css" />
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.treeview.js"></script>
 {% endblock %}
 
-{% block breadcrumbs %} - Цены{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_index %}">Цены</a>{% endblock %}
 
 {% block mainbar %}
 <div id="product-categories">

@@ -2,18 +2,15 @@
 
 {% load seo_tags fprice_tags %}
 
-{% block title %}{% seo title for flatpage as seo_title %}{% if seo_title %}{{ seo_title }}{% else %}{{ flatpage.title }}{% endif %}{% endblock %}
+{% block title %}Цены говорят{% endblock %}
 
-{% block description %}{% seo description for flatpage %}{% endblock %}
+{% block breadcrumbs %}<a href="{% url home %}">Главная</a> - Добро пожаловать!{% endblock %}
 
-{% block keywords %}{% seo keywords for flatpage %}{% endblock %}
-
-{% block breadcrumbs %} - Добро пожаловать!{% endblock %}
-
-{% block contentclass %}homepage{% endblock %}
+{% block contentclass %}price-index{% endblock %}
 
 {% block content %}
-{{ flatpage.content }}
+
+<h1>О нас</h1>
 
 <p><a href="{% url price_index %}">Изучить цены на товары</a></p>
 
