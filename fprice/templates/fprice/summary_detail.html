@@ -3,7 +3,7 @@
 
 {% block title %}Покупки {{ summary.time }} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_summary_list %}">Мои итоги</a> - Покупки{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_summary_list %}">Мои итоги</a> - Покупки{% endblock %}
 
 {% block contentclass %}summary{% endblock %}
 

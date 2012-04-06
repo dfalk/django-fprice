@@ -2,7 +2,7 @@
 
 {% block title %}Новая покупка | {{ block.super }}{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
 {{ block.super }}
 <link type="text/css" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
@@ -22,7 +22,7 @@ th { text-align: left; }
 </style>
 {% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_summary_list %}">Мои отчеты</a> - Новая покупка{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_summary_list %}">Мои отчеты</a> - Новая покупка{% endblock %}
 
 {% block contentclass %}price-add{% endblock %}
 {% block content %}

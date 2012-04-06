@@ -4,7 +4,7 @@
 {% block title %}Цены на {% if category %}{{ category.title|lower }}{% else %}товары{% endif %} | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %}
- - {% if category %}<a href="{% url price_product_list %}">Товары</a>{% else %}Товары{% endif %}{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
+{{ block.super }} - {% if category %}<a href="{% url price_product_list %}">Товары</a>{% else %}Товары{% endif %}{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
 {% endfor %}{% if category %} - {{ category }}{% endif %}
 {% endblock %}
 

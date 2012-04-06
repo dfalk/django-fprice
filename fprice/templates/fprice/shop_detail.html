@@ -3,12 +3,12 @@
 
 {% block title %}Цены в магазине {{ shop.title }} | {{ block.super }}{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
 {% endblock %}
 
-{% block breadcrumbs %} - <a href="{% url price_shop_list %}">Магазины</a> - Магазин{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_shop_list %}">Магазины</a> - Магазин{% endblock %}
 
 {% block contentclass %}shop{% endblock %}
 
