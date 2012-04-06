@@ -28,6 +28,7 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return u"%s" % (self.user)
 
+# TODO Make private app profile
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 User.get_profile = lambda u: UserProfile.objects.get_or_create(user=u)[0]
 
@@ -131,14 +132,14 @@ class Price(models.Model):
     '''
 
     # Authored
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(User)
 
     # Time-stamped
     time = models.DateTimeField(default=datetime.now)
     time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
 
     # Updateable
-    last_user_update = models.ForeignKey('User', related_name="last_user_update")
+    last_user_update = models.ForeignKey(User, related_name="last_user_update")
     last_time_update = models.DateTimeField(default=datetime.now)
     update_counter = models.IntegerField(default=0)
 
@@ -161,7 +162,7 @@ class Summary(models.Model):
     '''
 
     # Authored
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(User)
 
     # Time-stamped
     time = models.DateTimeField(default=datetime.now)
@@ -197,7 +198,7 @@ class Trade(models.Model):
     '''
 
     # Authored
-    customer = models.ForeignKey('User')
+    customer = models.ForeignKey(User)
 
     # Time-stamped
     time = models.DateTimeField(default=datetime.now) #(auto_now_add=True)
