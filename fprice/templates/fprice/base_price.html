@@ -13,7 +13,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.treeview.js"></script>
 {% endblock %}
 
-{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_index %}">Цены</a>{% endblock %}
+{% block breadcrumbs %}{{ block.super }}{% if FPRICE_SHOW_PRICE_BREADCRUMB %} - <a href="{% url price_index %}">Цены</a>{% endif %}{% endblock %}
 
 {% block mainbar %}
 <div id="product-categories">
