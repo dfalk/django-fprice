@@ -101,6 +101,7 @@ class TradeAdmin(admin.ModelAdmin):
 
 class TradeInline(admin.TabularInline):
     model = Trade
+    raw_id_fields = ('price',)
 
 class SummaryAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'time', 'user', 'shop']
@@ -117,6 +118,7 @@ class PriceAdmin(admin.ModelAdmin):
     #form = TradeForm
     #exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
     list_display = ['__unicode__', 'last_time_update', 'last_user_update']
+    raw_id_fields = ('shop','product',)
 
     def save_model(self, request, obj, form, change):
         if not change:
