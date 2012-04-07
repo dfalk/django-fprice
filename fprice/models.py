@@ -121,8 +121,8 @@ class Product(models.Model):
 
 CURR_CHOICES = (
     ('rur','руб'),
-    ('usd','usd'),
-    ('eur','eur'),
+#    ('usd','usd'),
+#    ('eur','eur'),
 )
 
 class Price(models.Model):
