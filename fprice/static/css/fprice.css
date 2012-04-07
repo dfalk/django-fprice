@@ -10,26 +10,31 @@
 
 /* ============================ FORM =============================== */
 
-#id_shop_visual {
+.ui_shop_visual {
     width: 350px;
 }
 
-#id_time {
+.ui_time {
     width: 140px;
 }
 
-#id_summary {
+.ui_summary {
     width: 80px;
 }
 
-#id_form-0-product_visual {
+.ui_product_visual {
     width: 350px;
 }
 
-#id_form-0-price_visual {
+.ui_price_visual {
     width: 80px;
 }
 
-#id_form-0-amount {
+.ui_amount {
     width: 50px;
+}
+
+#ui_total_block {
+    width: 586px;
+    text-align: right;
 }

@@ -22,6 +22,9 @@ class TitleForm(forms.ModelForm):
         super(TitleForm, self).__init__(*args, **kwargs)
         self.fields['shop_visual'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['time'].widget.format = '%Y-%m-%d %H:%M:%S'
+        self.fields['shop_visual'].widget.attrs['class'] = 'ui_shop_visual'
+        self.fields['time'].widget.attrs['class'] = 'ui_time'
+        self.fields['summary'].widget.attrs['class'] = 'ui_summary'
 
 class TradeForm(forms.ModelForm):
     product_visual = forms.CharField(max_length=200, label="Product", required=True)
@@ -32,5 +35,12 @@ class TradeForm(forms.ModelForm):
         model = Trade
         fields = ('product_visual', 'price_visual', 'amount')
         #exclude = ('customer', 'price')
+
+    def __init__(self, *args, **kwargs):
+
+        super(TradeForm, self).__init__(*args, **kwargs)
+        self.fields['product_visual'].widget.attrs['class'] = 'ui_product_visual'
+        self.fields['price_visual'].widget.attrs['class'] = 'ui_price_visual'
+        self.fields['amount'].widget.attrs['class'] = 'ui_amount'
 
 TradeFormSet = formset_factory(TradeForm)
