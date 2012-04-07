@@ -122,13 +122,45 @@ def price_up(request, price_id, **kwargs):
 
 @login_required
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
+    queryset = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=30))
+    summary_sum = queryset.aggregate(Sum('summary'))
+    month_list = Summary.objects.dates('time','month',order='DESC')
     return list_detail.object_list(
         request,
-        queryset = Summary.objects.filter(user=request.user),
+        queryset = queryset,
         paginate_by = 30,
         page = page,
         template_name = template_name,
+        extra_context = {'sum':summary_sum, 'month_list': month_list},
         **kwargs)
+
+@login_required
+def summary_archive_year(request, year, page=0, template_name='fprice/summary_archive_year.html', **kwargs):
+    queryset = Summary.objects.filter(user=request.user).filter(time__year=year)
+    summary_sum = queryset.aggregate(Sum('summary'))
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        paginate_by = 10,
+        page = page,
+        template_name = template_name,
+        extra_context = {'sum':summary_sum, 'year':year},
+        **kwargs)
+
+@login_required
+def summary_archive_month(request, year, month, page=0, template_name='fprice/summary_archive_month.html', **kwargs):
+    queryset = Summary.objects.filter(user=request.user).filter(time__year=year, time__month=month)
+    summary_sum = queryset.aggregate(Sum('summary'))
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        paginate_by = 10,
+        page = page,
+        template_name = template_name,
+        extra_context = {'sum':summary_sum, 'month':datetime.date(int(year),int(month),1)},
+        **kwargs)
+
+
 
 @login_required
 def summary_detail(request, summary_id, page=0, template_name='fprice/summary_detail.html', **kwargs):

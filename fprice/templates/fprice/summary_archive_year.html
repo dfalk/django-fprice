@@ -1,19 +1,18 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Мои отчеты | {{ block.super }}{% endblock %}
+{% block title %}Мои отчеты за {{ year }} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %}{{ block.super }} - Мои отчеты{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - Мои отчеты - {{ year }}{% endblock %}
 
 {% block contentclass %}summary{% endblock %}
 
 {% block content %}
-<h1>Мои отчеты</h1>
+<h1>Отчеты за {{ year }}</h1>
 <div id="trade-add">
 <a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a>
 </div>
 <br />
-<h2>За последние 30 дней</h2>
 <div id="summary-entries">
     <table>
     {% for item in object_list %}
