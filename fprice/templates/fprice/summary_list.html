@@ -19,11 +19,11 @@
     {% for item in object_list %}
         <tr><td><i>{{ item.time|date:"Y, j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b><a href="{{ item.get_absolute_url }}">{{ item.summary }}</a></b></td><td>{{ item.get_currency_display }}</td><td><a href="{% url price_shop_detail item.shop.id %}">{{ item.shop.title }}</a></td></tr>
     {% endfor %}
-    <tr><td></td><td><b>{{ sum.summary__sum }}</b></td><td>р</td></tr>
+    <tr><td></td><td><b>{{ sum.summary__sum }}</b></td><td>руб</td></tr>
     </table>
 </div><!-- /#trade-entries -->
 
-<h2>Архив</h2>
+<h2>Архив за последние 12 месяцев</h2>
 <div id="summary-archive">
 <ul>
     {% for month in month_list %}<li><a href="{% url summary_archive_month month.year month|date:"m" %}">{{ month.year }}, {{ month|date:"F" }}</a></li>

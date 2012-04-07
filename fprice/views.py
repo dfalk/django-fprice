@@ -124,7 +124,7 @@ def price_up(request, price_id, **kwargs):
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
     queryset = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=30))
     summary_sum = queryset.aggregate(Sum('summary'))
-    month_list = Summary.objects.dates('time','month',order='DESC')
+    month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).dates('time','month',order='DESC')
     return list_detail.object_list(
         request,
         queryset = queryset,

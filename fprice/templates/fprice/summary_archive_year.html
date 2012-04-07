@@ -3,7 +3,7 @@
 
 {% block title %}Мои отчеты за {{ year }} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %}{{ block.super }} - Мои отчеты - {{ year }}{% endblock %}
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_summary_list %}">Мои отчеты</a> - {{ year }}{% endblock %}
 
 {% block contentclass %}summary{% endblock %}
 
