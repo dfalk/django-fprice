@@ -4,9 +4,14 @@
 from django.db.models import get_model
 from django.template import Library, Node
 from django.template import TemplateSyntaxError
+from django.utils.dates import MONTHS
 import datetime
 
 register = Library()
+
+@register.filter
+def month_name(month_number):
+    return MONTHS[int(month_number)]
 
 class LatestContentNode(Node):
     def __init__(self, model, num, varname):

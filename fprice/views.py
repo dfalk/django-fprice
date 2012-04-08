@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django.db import connections
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import list_detail
 from django.views.generic.simple import direct_to_template
@@ -124,7 +125,8 @@ def price_up(request, price_id, **kwargs):
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
     queryset = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=30))
     summary_sum = queryset.aggregate(Sum('summary'))
-    month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).dates('time','month',order='DESC')
+    #month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).dates('time','month',order='DESC')
+    month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).extra(select={'year': connections[Summary.objects.db].ops.date_extract_sql('year', 'time'), 'month': connections[Summary.objects.db].ops.date_extract_sql('month', 'time')}).values('year','month').annotate(sum=Sum('summary')).order_by('-year','-month')
     return list_detail.object_list(
         request,
         queryset = queryset,

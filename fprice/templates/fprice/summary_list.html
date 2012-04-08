@@ -1,5 +1,5 @@
 {% extends "fprice/base_price.html" %}
-{% load comments markup %}
+{% load comments markup fprice_tags %}
 
 {% block title %}Мои отчеты | {{ block.super }}{% endblock %}
 
@@ -26,7 +26,7 @@
 <h2>Архив за последние 12 месяцев</h2>
 <div id="summary-archive">
 <ul>
-    {% for month in month_list %}<li><a href="{% url summary_archive_month month.year month|date:"m" %}">{{ month.year }}, {{ month|date:"F" }}</a></li>
+    {% for month in month_list %}<li><a href="{% url summary_archive_month month.year month.month|stringformat:"02d" %}">{{ month.year }}, {{ month.month|month_name }}</a> = <b>{{ month.sum }} руб</b></li>
     {% endfor %}
 </ul>
 </div>
