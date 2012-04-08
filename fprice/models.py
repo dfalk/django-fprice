@@ -103,10 +103,20 @@ class Product(models.Model):
     List of products.
     '''
 
+    # Named
     title = models.CharField(max_length=200)
-    category = models.ForeignKey(ProductCategory, null=True, blank=True)
-    description = models.TextField(blank=True)
+
+    # Core
     # TODO producer field
+
+    # Category
+    category = models.ForeignKey(ProductCategory, null=True, blank=True)
+
+    # Content
+    description = models.TextField(blank=True)
+
+    # Featured
+    is_featured = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u"%s" % (self.title)
