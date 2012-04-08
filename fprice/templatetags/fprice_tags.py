@@ -34,6 +34,27 @@ def get_latest(parser, token):
     return LatestContentNode(bits[1], bits[2], bits[4])
 get_latest = register.tag(get_latest)
 
+class FeaturedContentNode(Node):
+    def __init__(self, model, num, varname):
+        self.num, self.varname = num, varname
+        self.model = get_model(*model.split('.'))
+        
+    def render(self, context):
+        context[self.varname] = self.model._default_manager.filter(is_featured=True)[:self.num]
+        return ''
+
+def get_featured(parser, token):
+    """
+    Usage: {% get_featured <app.model> <count> as <var> %}
+    """
+    bits = token.contents.split()
+    if len(bits) != 5:
+        raise TemplateSyntaxError, "get_featured tag takes exactly four arguments"
+    if bits[3] != 'as':
+        raise TemplateSyntaxError, "third argument to get_latest tag must be 'as'"
+    return FeaturedContentNode(bits[1], bits[2], bits[4])
+get_featured = register.tag(get_featured)
+
 class LatestCounterNode(Node):
     def __init__(self, model, num, varname):
         self.num, self.varname = int(num), varname

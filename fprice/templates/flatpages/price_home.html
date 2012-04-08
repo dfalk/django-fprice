@@ -13,7 +13,6 @@
 {{ flatpage.content }}
 
 <h2>Обновления</h2>
-
 <div id="price-updates">
 <p>Цены за сутки/неделю/месяц: <b>{% get_counter fprice.Price 1 as price_count1 %}{{ price_count1 }}</b>
 / <b>{% get_counter fprice.Price 7 as price_count7 %}{{ price_count7 }}</b>
@@ -21,9 +20,18 @@
 </p>
 <p>Покупки за сутки/неделю/месяц: <b>{% get_counter fprice.Summary 1 as sum_count1 %}{{ sum_count1 }}</b> / <b>{% get_counter fprice.Summary 7 as sum_count7 %}{{ sum_count7 }}</b> / <b>{% get_counter fprice.Summary 30 as sum_count30 %}{{ sum_count30 }}</b></p>
 </div><!-- /#price-updates -->
-
 <div id="trade-add">
 <p><a href="{% url price_trade_add %}">Добавьте вашу покупку прямо сейчас!</a></p>
+</div>
+
+<h2>Популярные продукты</h2>
+<div id="product-featured-list">
+<ul>{% get_featured fprice.Product 15 as featured_list %}
+{% for item in featured_list %}
+<li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+{% endfor %}
+</ul>
+<p><a href="{% url price_product_list %}">Изучайте полный список</a></p>
 </div>
 
 {% endblock %}
