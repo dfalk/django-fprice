@@ -129,6 +129,22 @@ class Product(models.Model):
         ordering = ["title"]
 
 
+#class ShopProduct(models.Model):
+
+    # Time-stamped
+    #time = models.DateTimeField(default=datetime.now)
+    #time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
+
+    # Core
+    #shop = models.ForeignKey('Shop')
+    #product = models.ForeignKey('Product')
+    #last_price = models.ForeignKey('Price', blank=True)
+
+    # Last price cache
+    #price = models.DecimalField(max_digits=19, decimal_places=2)
+    #currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+
+
 CURR_CHOICES = (
     ('rur','руб'),
 #    ('usd','usd'),
@@ -140,6 +156,16 @@ class Price(models.Model):
     Core model.
     Price log for products via shops.
     '''
+
+    # Core, must be replaced
+    shop = models.ForeignKey('Shop')
+    product = models.ForeignKey('Product')
+    # New
+    #shop_product = models.ForeignKey('ShopProduct')
+
+    # Price
+    price = models.DecimalField(max_digits=19, decimal_places=2)
+    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
 
     # Authored
     user = models.ForeignKey(User)
@@ -153,19 +179,13 @@ class Price(models.Model):
     last_time_update = models.DateTimeField(default=datetime.now)
     update_counter = models.IntegerField(default=0)
 
-    # Core
-    shop = models.ForeignKey('Shop')
-    product = models.ForeignKey('Product')
-    price = models.DecimalField(max_digits=19, decimal_places=2)
-    currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
-
     def __unicode__(self):
         return u"%s - %s %s (%s)" % (self.product, self.price, self.currency, self.shop)
 
     class Meta:
         ordering = ["-last_time_update"]
-
-
+        
+        
 class Summary(models.Model):
     '''
     Summary cost for trade.
