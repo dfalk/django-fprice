@@ -9,13 +9,14 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Q
+from django.forms.formsets import formset_factory
 
 from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
 from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary
-from fprice.forms import TradeForm, TradeFormSet, TitleForm
+from fprice.forms import TradeForm, TradeFormSet, TitleForm, PriceFormSet, PriceForm
 
 
 def search(request):
@@ -89,6 +90,53 @@ def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html
         template_name = template_name,
         extra_context = {'shop':shop, 'price_list':price_list},
         **kwargs)
+
+def shop_edit_featured(request, shop_id, page=0, template_name='fprice/shop_edit_featured.html', **kwargs):
+    shop = Shop.objects.get(id=shop_id)
+    products = Product.objects.filter(is_featured=True)
+    PriceFormSetA = formset_factory(PriceForm, extra=0)
+
+    if request.method == 'POST':
+        formset = PriceFormSetA(request.POST)
+
+        if formset.is_valid():
+            for form in formset.forms:
+                if form.has_changed():
+                    # check existing price or add new
+                    product = Product.objects.get(id=form.cleaned_data['product'])
+                    try:
+                        new_price = Price.objects.get(shop=shop, product=product, price=form.cleaned_data['price_visual'])
+                    except Price.DoesNotExist:
+                        new_price = None
+                    if (new_price == None):
+                        if form.cleaned_data['price_visual']: # TODO form has changed not working
+                            new_price = Price()
+                            new_price.user = request.user
+                            new_price.last_user_update = request.user
+                            new_price.time = datetime.datetime.now()#forma.cleaned_data['time']
+                            new_price.last_time_update = datetime.datetime.now()#forma.cleaned_data['time']
+                            new_price.shop = shop
+                            new_price.product = product
+                            new_price.price = form.cleaned_data['price_visual']
+                            new_price.currency = 'rur'#forma.cleaned_data['currency']
+                            new_price.save()
+                    else:
+                        if datetime.datetime.now() > new_price.last_time_update:
+                            new_price.last_user_update = request.user
+                            new_price.last_time_update = datetime.datetime.now()#forma.cleaned_data['time']
+                        if datetime.datetime.now() < new_price.time:
+                            new_price.time = datetime.datetime.now()#forma.cleaned_data['time']
+                        new_price.update_counter += 1
+                        new_price.save()
+
+            return HttpResponseRedirect(reverse('price_shop_list'))
+    else:
+        initial_data_list = []
+        for item in products:
+            initial_data_list.append({'product':item.id, 'product_visual':item.title})
+        formset = PriceFormSetA(initial=initial_data_list)
+
+    return direct_to_template(request, 'fprice/shop_edit_featured.html',{'shop':shop, 'formset':formset})
 
 def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)

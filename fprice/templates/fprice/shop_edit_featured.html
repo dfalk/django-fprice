@@ -1,0 +1,35 @@
+{% extends "fprice/base_price.html" %}
+
+{% block title %}Ввод цен | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_shop_list %}">Магазины</a> - <a href="{% url price_shop_detail shop.id %}">Магазин</a> - Ввод цен{% endblock %}
+
+{% block contentclass %}shop-featured-add{% endblock %}
+{% block content %}
+<h1>Ввод цен</h1>
+
+<form action="" method="post">{% csrf_token %}
+    <table id="priceform">
+        <thead>
+            <tr>
+                <th scope="col">Продукт<br />(название)</th>
+                <th scope="col">Цена<br />(за 1 ед.)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for form in formset.forms %}
+            <tr id="{{ form.prefix }}-row">
+                <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
+                <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
+             </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ formset.management_form }}
+    <br />
+    <input type="submit" value="Сохранить" />
+</form>
+
+</div>
+{% endblock %}
+            

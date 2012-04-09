@@ -4,7 +4,7 @@
 from django.db import models
 from django import forms
 from django.forms.formsets import formset_factory
-from fprice.models import Summary, Trade, Shop, CURR_CHOICES
+from fprice.models import Summary, Trade, Shop, Price, CURR_CHOICES
 import datetime
 
 class TitleForm(forms.ModelForm):
@@ -44,3 +44,20 @@ class TradeForm(forms.ModelForm):
         self.fields['amount'].widget.attrs['class'] = 'ui_amount'
 
 TradeFormSet = formset_factory(TradeForm)
+
+class PriceForm(forms.ModelForm):
+    product_visual = forms.CharField(max_length=200, label="Product", required=True)
+    product = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
+    price_visual = forms.DecimalField(max_digits=12, decimal_places=2, required=False)
+
+    class Meta:
+        model = Price
+        fields = ('product_visual', 'price_visual')
+
+    def __init__(self, *args, **kwargs):
+
+        super(PriceForm, self).__init__(*args, **kwargs)
+        self.fields['product_visual'].widget.attrs['class'] = 'ui_product_visual'
+        self.fields['product_visual'].widget.attrs['readonly'] = True # for text input
+
+PriceFormSet = formset_factory(PriceForm)
