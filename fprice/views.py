@@ -310,7 +310,6 @@ def shop_edit_featured(request, shop_id, page=0, template_name='fprice/shop_edit
         formset = PriceFormSetA(request.POST)
 
         if formset.is_valid():
-            print 'true'
             for form in formset.forms:
                 if form.has_changed() and form.cleaned_data['price_visual']:
                     # check shop_product
