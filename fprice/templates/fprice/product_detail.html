@@ -20,14 +20,15 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+    // data
     var dataset = {
-        {% for shop in price_list %}
-        "{{ shop.shop_id }}": {
-            label: '<b>{{ shop.price }}</b> {{ shop.get_currency_display }} <a href="{% url price_prodshop_detail product.id shop.shop_id %}">{{ shop.title }}</a>',
+        {% for item in object_list %}
+        "{{ item.shop.id }}": {
+            label: '<b>{{ item.last_price.price }}</b> {{ item.last_price.get_currency_display }} <a href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.shop.title }}</a>',
             color: 0,
-            data: [{% for item in object_list %}{% ifequal item.shop.id shop.shop_id %}
-            ["{{ item.last_time_update|date:'Y/m/d G:i:s' }}",{{ item.price|escapejs }}],
-            ["{{ item.time|date:'Y/m/d G:i:s' }}",{{ item.price|escapejs }}],
+            data: [{% for price in price_list %}{% ifequal item.shop.id price.shop_product.shop.id %}
+            ["{{ price.last_time_update|date:'Y/m/d G:i:s' }}",{{ price.price|escapejs }}],
+            ["{{ price.time|date:'Y/m/d G:i:s' }}",{{ price.price|escapejs }}],
             {% endifequal %}{% endfor %}]
         },
         {% endfor %}

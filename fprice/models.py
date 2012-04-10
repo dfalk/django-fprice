@@ -129,20 +129,30 @@ class Product(models.Model):
         ordering = ["title"]
 
 
-#class ShopProduct(models.Model):
+class ShopProduct(models.Model):
+    '''
+    Core model.
+    Last prices for products via shops.
+    '''
 
     # Time-stamped
-    #time = models.DateTimeField(default=datetime.now)
-    #time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
+    time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
 
     # Core
-    #shop = models.ForeignKey('Shop')
-    #product = models.ForeignKey('Product')
-    #last_price = models.ForeignKey('Price', blank=True)
+    shop = models.ForeignKey('Shop')
+    product = models.ForeignKey('Product')
+    last_price = models.ForeignKey('Price', blank=True, null=True) # TODO required field
 
-    # Last price cache
+    # Last price (optional cache for future)
     #price = models.DecimalField(max_digits=19, decimal_places=2)
     #currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+    #time = models.DateTimeField(default=datetime.now)
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.shop, self.product)
+
+    class Meta:
+        ordering = ['product']
 
 
 CURR_CHOICES = (
@@ -154,33 +164,33 @@ CURR_CHOICES = (
 class Price(models.Model):
     '''
     Core model.
-    Price log for products via shops.
+    Price log for ShopProduct.
     '''
 
     # Core, must be replaced
-    shop = models.ForeignKey('Shop')
-    product = models.ForeignKey('Product')
+    #shop = models.ForeignKey('Shop')
+    #product = models.ForeignKey('Product')
     # New
-    #shop_product = models.ForeignKey('ShopProduct')
+    shop_product = models.ForeignKey('ShopProduct')
 
-    # Price
+    # Core
+    time = models.DateTimeField(default=datetime.now)
     price = models.DecimalField(max_digits=19, decimal_places=2)
     currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
-
     # Authored
     user = models.ForeignKey(User)
 
-    # Time-stamped
-    time = models.DateTimeField(default=datetime.now)
-    time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
-
     # Updateable
-    last_user_update = models.ForeignKey(User, related_name="last_user_update")
-    last_time_update = models.DateTimeField(default=datetime.now)
     update_counter = models.IntegerField(default=0)
+    last_time_update = models.DateTimeField(default=datetime.now)
+    last_user_update = models.ForeignKey(User, related_name="last_user_update")
+    
+    # Time-stamped
+    time_added = models.DateTimeField(default=datetime.now,editable=False) # actual time
+    # TODO time_updated # it's actual time
 
     def __unicode__(self):
-        return u"%s - %s %s (%s)" % (self.product, self.price, self.currency, self.shop)
+        return u"%s %s" % (self.price, self.currency)
 
     class Meta:
         ordering = ["-last_time_update"]
@@ -235,13 +245,13 @@ class Trade(models.Model):
     #time_added = models.DateTimeField(default=datetime.now,editable=False)
 
     # Core
+    summary = models.ForeignKey('Summary', blank=True, null=True) # TODO it's must be required field
     price = models.ForeignKey('Price')
     amount = models.FloatField()
     cost = models.DecimalField(max_digits=12, decimal_places=2)
-    summary = models.ForeignKey('Summary', blank=True, null=True) # TODO it's must be required field
 
     def __unicode__(self):
-        return u"%s - %s" % (self.price.product, self.amount)
+        return u"%s - %s" % (self.price.shop_product.product, self.amount)
 
     def get_price(self):
         return u"%s %s" % (self.price.price, self.price.currency)

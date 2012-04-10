@@ -46,7 +46,7 @@ class TradeForm(forms.ModelForm):
 TradeFormSet = formset_factory(TradeForm)
 
 class PriceForm(forms.ModelForm):
-    product_visual = forms.CharField(max_length=200, label="Product", required=True)
+    product_visual = forms.CharField(max_length=200, label="Product", required=False)
     product = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
     price_visual = forms.DecimalField(max_digits=12, decimal_places=2, required=False)
 

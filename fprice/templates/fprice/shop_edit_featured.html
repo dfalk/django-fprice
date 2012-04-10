@@ -13,14 +13,14 @@
         <thead>
             <tr>
                 <th scope="col">Продукт<br />(название)</th>
-                <th scope="col">Цена<br />(за 1 ед.)</th>
             </tr>
         </thead>
         <tbody>
         {% for form in formset.forms %}
             <tr id="{{ form.prefix }}-row">
-                <td>{{ form.product_visual.errors }}{{ form.product_visual }}{{ form.product }}</td>
-                <td>{{ form.price_visual.errors }}{{ form.price_visual }}</td>
+                {{ form.product.errors }}{{ form.product }}
+                <td>{{ form.product_visual.value }}<br>
+                {{ form.price_visual.errors }}{{ form.price_visual }}</td>
              </tr>
         {% endfor %}
         </tbody>

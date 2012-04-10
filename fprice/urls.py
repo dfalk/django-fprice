@@ -33,9 +33,6 @@ urlpatterns = patterns('fprice.views',
     url(r'^profile/prices/$', view='price_list', name='price_list'),
     url(r'^profile/prices/admin/$', view='price_admin', name='price_admin'),
 
-    url(r'^profile/trades/$', view='trade_list', name='price_trade_list'),
-    url(r'^profile/trades/admin/$', view='trade_admin', name='price_trade_admin'),
-
     # Actions
     url(r'^search/$', view='search', name='price_search'),
     url(r'^profile/trades/add/$', view='trade_add', name='price_trade_add'),

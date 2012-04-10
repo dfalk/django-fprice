@@ -6,7 +6,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.views.generic.simple import direct_to_template
 from django.http import HttpResponse, HttpResponseRedirect
-from fprice.models import City, UserProfile, Shop, ProductCategory, Product, Price, Trade, Summary
+from fprice.models import City, UserProfile, Shop, ProductCategory, Product, Price, Trade, Summary, ShopProduct
 from fprice.forms import TradeForm
 from mptt.admin import MPTTModelAdmin
 
@@ -14,6 +14,8 @@ from mptt.admin import MPTTModelAdmin
 class ProductAdmin(admin.ModelAdmin):
     actions = ['change_category']
     list_display = ['__unicode__', 'category']
+    list_filter = ('category',)
+    search_fields = ('title',)
 
     class CategoryForm(forms.Form):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
@@ -45,11 +47,8 @@ class ProductAdmin(admin.ModelAdmin):
 
     change_category.short_description = 'Set category'
 
-
 class TradeAdmin(admin.ModelAdmin):
-    '''
-    Deprecated.
-    '''
+    ''' Deprecated. '''
     #form = TradeForm
     actions = ['change_summary']
     list_display = ['__unicode__', 'get_price', 'cost', 'time', 'customer', 'summary']
@@ -100,25 +99,40 @@ class TradeAdmin(admin.ModelAdmin):
         obj.save()
 
 class TradeInline(admin.TabularInline):
+    ''' Details for Summary '''
     model = Trade
     raw_id_fields = ('price',)
+    extra = 1
 
 class SummaryAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'time', 'user', 'shop']
+    raw_id_fields = ('shop',)
     inlines = [
         TradeInline,
     ]
 
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.user = request.user
-        obj.save()
+class PriceInline(admin.TabularInline):
+    ''' Details for ShopProduct '''
+    model = Price
+    extra = 0
+
+class ShopProductAdmin(admin.ModelAdmin):
+    list_display = ['product','shop','last_price']
+    raw_id_fields = ('product','shop','last_price',)
+    list_filter = ('product__category',)
+    search_fields = ('shop','product',)
+    inlines = [
+        PriceInline,
+    ]
 
 class PriceAdmin(admin.ModelAdmin):
+    ''' Must be deprecated. '''
     #form = TradeForm
     #exclude = ('user','last_user_update','time','last_time_update', 'update_counter',)
-    list_display = ['__unicode__', 'last_time_update', 'last_user_update']
-    raw_id_fields = ('shop','product',)
+    list_display = ['__unicode__', 'shop_product','last_time_update', 'last_user_update']
+    list_filter = ('shop_product__product__category',)
+    search_fields = ('shop_product__shop','shop_product__product',)
+    raw_id_fields = ('shop_product',)
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -126,10 +140,11 @@ class PriceAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(City)
-admin.site.register(UserProfile)
 admin.site.register(Shop)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, MPTTModelAdmin)
+admin.site.register(ShopProduct, ShopProductAdmin)
+admin.site.register(Price, PriceAdmin)
 #admin.site.register(Trade, TradeAdmin)
 admin.site.register(Summary, SummaryAdmin)
-admin.site.register(Price, PriceAdmin)
+admin.site.register(UserProfile)
