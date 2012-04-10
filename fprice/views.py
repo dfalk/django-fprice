@@ -277,9 +277,13 @@ def trade_add(request, **kwargs):
                         
                     # update shop_product last_price
                     # TODO check if not last_price
-                    if new_shopprod.last_price.last_time_update < new_price.last_time_update:
-                        new_shopprod.last_price = new_price
-                        new_shopprod.save()
+                    if new_shopprod.last_price:
+                        if new_shopprod.last_price.last_time_update < new_price.last_time_update:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
+                    else:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
 
                     # save trade if it is not spy
                     if not forma.cleaned_data['spytrade']:
