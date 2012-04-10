@@ -353,9 +353,13 @@ def shop_edit_featured(request, shop_id, page=0, template_name='fprice/shop_edit
 
                     # update shop_product last_price
                     # TODO check if not last_price
-                    if new_shopprod.last_price.last_time_update < new_price.last_time_update:
-                        new_shopprod.last_price = new_price
-                        new_shopprod.save()
+                    if new_shopprod.last_price:
+                        if new_shopprod.last_price.last_time_update < new_price.last_time_update:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
+                    else:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
 
             return HttpResponseRedirect(reverse('price_shop_detail', args=[shop_id]))
     else:
