@@ -79,13 +79,15 @@ def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
 
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
     shop = Shop.objects.get(id=shop_id)
+    queryset = ShopProduct.objects.filter(shop=shop).select_related('shop','product','last_price')
+    subcategories = ProductCategory.objects.filter(id__in=queryset.values('product__category'))
     return list_detail.object_list(
         request,
-        queryset = ShopProduct.objects.filter(shop=shop).select_related('shop','product','last_price'),
+        queryset = queryset,
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'shop':shop},
+        extra_context = {'shop':shop, 'subcategories':subcategories},
         **kwargs)
 
 def shop_detail_category(request, shop_id, cat_slug, page=0, template_name='fprice/shop_detail_category.html', **kwargs):

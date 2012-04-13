@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-{{ block.super }} - <a href="{% url price_product_list %}">Товары</a>{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
+{{ block.super }} - <a href="{% url price_shop_detail shop.id %}">Магазин</a>{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
 {% endfor %} - <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a> - Продукт в магазине</a>
 {% endblock %}
 
