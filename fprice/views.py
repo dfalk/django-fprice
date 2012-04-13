@@ -290,9 +290,13 @@ def trade_add(request, **kwargs):
                         
                     # update shop_product last_price
                     # TODO check if not last_price
-                    if new_shopprod.last_price.last_time_update < new_price.last_time_update:
-                        new_shopprod.last_price = new_price
-                        new_shopprod.save()
+                    if new_shopprod.last_price:
+                        if new_shopprod.last_price.last_time_update < new_price.last_time_update:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
+                    else:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
 
                     # save trade if it is not spy
                     if not forma.cleaned_data['spytrade']:
@@ -323,7 +327,6 @@ def shop_edit_featured(request, shop_id, page=0, template_name='fprice/shop_edit
         formset = PriceFormSetA(request.POST)
 
         if formset.is_valid():
-            print 'true'
             for form in formset.forms:
                 if form.has_changed() and form.cleaned_data['price_visual']:
                     # check shop_product
@@ -367,9 +370,13 @@ def shop_edit_featured(request, shop_id, page=0, template_name='fprice/shop_edit
 
                     # update shop_product last_price
                     # TODO check if not last_price
-                    if new_shopprod.last_price.last_time_update < new_price.last_time_update:
-                        new_shopprod.last_price = new_price
-                        new_shopprod.save()
+                    if new_shopprod.last_price:
+                        if new_shopprod.last_price.last_time_update < new_price.last_time_update:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
+                    else:
+                            new_shopprod.last_price = new_price
+                            new_shopprod.save()
 
             return HttpResponseRedirect(reverse('price_shop_detail', args=[shop_id]))
     else:
