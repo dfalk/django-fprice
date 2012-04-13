@@ -88,6 +88,19 @@ def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html
         extra_context = {'shop':shop},
         **kwargs)
 
+def shop_detail_category(request, shop_id, cat_slug, page=0, template_name='fprice/shop_detail_category.html', **kwargs):
+    shop = Shop.objects.get(id=shop_id)
+    category = ProductCategory.objects.get(slug=cat_slug)
+    queryset = ShopProduct.objects.filter(shop=shop).filter(product__category=category).select_related('shop','product','last_price')
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'shop':shop, 'category':category},
+        **kwargs)
+
 def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice/prodshop_detail.html', **kwargs):
     product = Product.objects.get(id=product_id)
     try:

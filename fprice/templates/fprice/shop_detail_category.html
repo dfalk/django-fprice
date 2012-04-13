@@ -1,0 +1,33 @@
+{% extends "fprice/base_price.html" %}
+{% load comments markup %}
+
+{% block title %}Цены в магазине {{ shop.title }} | {{ block.super }}{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
+{% endblock %}
+
+{% block breadcrumbs %}{{ block.super }} - <a href="{% url price_shop_list %}">Магазины</a> - <a href="{% url price_shop_detail shop.id %}">Магазин</a> - {{ category }}</p>{% endblock %}
+
+{% block contentclass %}shop{% endblock %}
+
+{% block content %}
+<h1>Цены в магазине {{ shop.title }}</h1>
+
+<p><a href="{% url price_shop_edit_featured shop.id %}">Ввести цены на популярные продукты</a></p>
+
+<div id="price-entries">
+    <table>
+    {% for item in object_list %}
+        <tr><td><i>{{ item.last_price.last_time_update|date:"j b H:i" }}</i></td><td style="text-align: right; padding-left: 10px; padding-right: 0px;"><b>{{ item.last_price.price }}</b></td><td>{{ item.last_price.get_currency_display }}</td><td><a href="{% url price_prodshop_detail item.product.id item.shop.id %}">{{ item.product.title }}</a></td></tr>
+    {% endfor %}
+    </table>
+</div><!-- /#price-entries -->
+
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+{% endblock %}
