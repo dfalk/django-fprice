@@ -266,11 +266,28 @@ def trade_add(request, **kwargs):
                         new_shopprod.save()
 
                     # check existing price or add new
+                    newer_price = None
                     try:
-                        new_price = Price.objects.get(shop_product=new_shopprod, price=form.cleaned_data['price_visual'], currency=forma.cleaned_data['currency'])
-                    except Price.DoesNotExist:
-                        new_price = None
-                    if new_price == None:
+                        older_price = Price.objects.filter(shop_product=new_shopprod, last_time_update__lt=forma.cleaned_data['time'], currency=forma.cleaned_data['currency'])[0]
+                    except IndexError:
+                        older_price = None
+                        try:
+                            newer_price = Price.objects.order_by('last_time_update').filter(shop_product=new_shopprod, last_time_update__gt=forma.cleaned_data['time'], currency=forma.cleaned_data['currency'])[0]
+                        except IndexError:
+                            newer_price = None
+
+                    if older_price and older_price.price == form.cleaned_data['price_visual']:
+                        older_price.last_user_update = request.user
+                        older_price.last_time_update = forma.cleaned_data['time']
+                        older_price.update_counter += 1
+                        older_price.save()
+                        new_price = older_price
+                    elif newer_price and newer_price.price == form.cleaned_data['price_visual']:
+                        newer_price.time = forma.cleaned_data['time']
+                        newer_price.update_counter += 1
+                        newer_price.save()
+                        new_price = newer_price
+                    else:
                         new_price = Price()
                         new_price.user = request.user
                         new_price.last_user_update = request.user
@@ -280,18 +297,8 @@ def trade_add(request, **kwargs):
                         new_price.price = form.cleaned_data['price_visual']
                         new_price.currency = forma.cleaned_data['currency']
                         new_price.save()
-                    else:
-                        # TODO check logic
-                        if forma.cleaned_data['time'] > new_price.last_time_update:
-                            new_price.last_user_update = request.user
-                            new_price.last_time_update = forma.cleaned_data['time']
-                        if forma.cleaned_data['time'] < new_price.time:
-                            new_price.time = forma.cleaned_data['time']
-                        new_price.update_counter += 1
-                        new_price.save()
                         
                     # update shop_product last_price
-                    # TODO check if not last_price
                     if new_shopprod.last_price:
                         if new_shopprod.last_price.last_time_update < new_price.last_time_update:
                             new_shopprod.last_price = new_price
