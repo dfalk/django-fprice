@@ -267,8 +267,10 @@ def trade_add(request, **kwargs):
 
                     # check existing price or add new
                     newer_price = None
+                    new_price = None
+
                     try:
-                        older_price = Price.objects.filter(shop_product=new_shopprod, last_time_update__lt=forma.cleaned_data['time'], currency=forma.cleaned_data['currency'])[0]
+                        older_price = Price.objects.filter(shop_product=new_shopprod, time__lt=forma.cleaned_data['time'], currency=forma.cleaned_data['currency'])[0]
                     except IndexError:
                         older_price = None
                         try:
@@ -276,18 +278,37 @@ def trade_add(request, **kwargs):
                         except IndexError:
                             newer_price = None
 
-                    if older_price and older_price.price == form.cleaned_data['price_visual']:
-                        older_price.last_user_update = request.user
-                        older_price.last_time_update = forma.cleaned_data['time']
-                        older_price.update_counter += 1
-                        older_price.save()
-                        new_price = older_price
+                    if older_price:
+                        if older_price.price == form.cleaned_data['price_visual']:
+                            older_price.last_user_update = request.user
+                            if forma.cleaned_data['time'] > older_price.last_time_update:
+                                older_price.last_time_update = forma.cleaned_data['time']
+                            older_price.update_counter += 1
+                            older_price.save()
+                            new_price = older_price
+                        elif forma.cleaned_data['time'] < older_price.last_time_update:
+                            # split price
+                            new_newer_price = Price()
+                            new_newer_price.user = older_price.last_user_update
+                            new_newer_price.last_user_update = older_price.last_user_update
+                            new_newer_price.time = older_price.last_time_update
+                            new_newer_price.last_time_update = older_price.last_time_update
+                            new_newer_price.shop_product = new_shopprod
+                            new_newer_price.price = older_price.price
+                            new_newer_price.currency = older_price.currency
+                            new_newer_price.save()
+                            older_price.last_user_update = older_price.user
+                            older_price.last_time_update = older_price.time
+                            older_price.update_counter = 0
+                            older_price.save()
                     elif newer_price and newer_price.price == form.cleaned_data['price_visual']:
+                        newer_price.last_user_update = request.user
                         newer_price.time = forma.cleaned_data['time']
                         newer_price.update_counter += 1
                         newer_price.save()
                         new_price = newer_price
-                    else:
+
+                    if not new_price:
                         new_price = Price()
                         new_price.user = request.user
                         new_price.last_user_update = request.user
