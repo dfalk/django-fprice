@@ -125,6 +125,7 @@ def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
     queryset = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=30)).select_related('shop','user')
     summary_sum = queryset.aggregate(Sum('summary'))
+    shop_list = Summary.objects.filter(user=request.user).order_by('shop').values('shop','shop__title').annotate(count=Count('shop')).order_by('-count')[:20]
     #month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).dates('time','month',order='DESC')
     month_list = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).extra(select={'year': connections[Summary.objects.db].ops.date_extract_sql('year', 'time'), 'month': connections[Summary.objects.db].ops.date_extract_sql('month', 'time')}).values('year','month').annotate(sum=Sum('summary')).order_by('-year','-month')
     return list_detail.object_list(
@@ -133,7 +134,7 @@ def summary_list(request, page=0, template_name='fprice/summary_list.html', **kw
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'sum':summary_sum, 'month_list': month_list},
+        extra_context = {'sum':summary_sum, 'month_list': month_list, 'shop_list': shop_list},
         **kwargs)
 
 @login_required

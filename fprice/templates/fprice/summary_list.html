@@ -23,6 +23,12 @@
     </table>
 </div><!-- /#trade-entries -->
 
+{% if is_paginated %}<div class="pagination">Страницы:
+    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
+    <span class="page-position">{{ page }}/{{ pages }}</span>
+    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
+</div>{% endif %}
+
 <h2>Архив за последние 12 месяцев</h2>
 <div id="summary-archive">
 <ul>
@@ -31,9 +37,12 @@
 </ul>
 </div>
 
-{% if is_paginated %}<div class="pagination">Страницы:
-    {% if has_previous %}<a class="page-previous" href="?page={{ previous }}">позже</a>{% endif %}
-    <span class="page-position">{{ page }}/{{ pages }}</span>
-    {% if has_next %}<a class="page-next" href="?page={{ next }}">раньше</a>{% endif %}
-</div>{% endif %}
+<h2>Магазины, в которых вы чаще всего бываете</h2>
+<div id="shop-list">
+<ul>{% for shop in shop_list %}
+    <li><a href="{% url price_shop_detail shop.shop %}">{{ shop.shop__title }}</a> ({{ shop.count }})</li>
+    {% endfor %}
+</ul>
+</div>
+
 {% endblock %}
