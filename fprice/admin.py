@@ -13,7 +13,8 @@ from mptt.admin import MPTTModelAdmin
 
 class ProductAdmin(admin.ModelAdmin):
     actions = ['change_category']
-    list_display = ['__unicode__', 'category']
+    list_display = ['__unicode__', 'category', 'is_featured']
+    list_editable = ['is_featured']
     list_filter = ('category',)
     search_fields = ('title',)
 
