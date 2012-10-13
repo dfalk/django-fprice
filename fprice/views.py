@@ -92,7 +92,7 @@ def shopnet_detail(request, slug, page=0, template_name='fprice/shopnet_list.htm
     shopnet = ShopNet.objects.get(slug=slug)
     return list_detail.object_list(
         request,
-        queryset = Shop.objects.all(),
+        queryset = Shop.objects.filter(net=shopnet),
         paginate_by = 30,
         page = page,
         template_name = template_name,
