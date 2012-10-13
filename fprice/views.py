@@ -15,7 +15,7 @@ from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
-from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary, ShopProduct
+from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary, ShopProduct, ShopCategory, ShopNet
 from fprice.forms import TradeForm, TradeFormSet, TitleForm, PriceFormSet, PriceForm
 
 
@@ -69,12 +69,48 @@ def product_detail(request, product_id, page=0, template_name='fprice/product_de
         **kwargs)
 
 def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
+    children = ShopCategory.objects.filter(parent__isnull=True)
     return list_detail.object_list(
         request,
         queryset = Shop.objects.all(),
         paginate_by = 30,
         page = page,
         template_name = template_name,
+        extra_context = {'children':children},
+        **kwargs)
+
+def shopnet_list(request, page=0, template_name='fprice/shopnet_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = ShopNet.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
+def shopnet_detail(request, slug, page=0, template_name='fprice/shopnet_list.html', **kwargs):
+    shopnet = ShopNet.objects.get(slug=slug)
+    return list_detail.object_list(
+        request,
+        queryset = Shop.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'shopnet':shopnet},
+        **kwargs)
+
+def shop_category(request, slug, page=0, template_name='fprice/shop_list.html', **kwargs):
+    category = ShopCategory.objects.get(slug=slug)
+    subcategories = category.get_descendants(include_self=True)
+    categories = category.get_ancestors()
+    children = category.get_children()
+    return list_detail.object_list(
+        request,
+        queryset = Shop.objects.filter(category__in=subcategories),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'category':category,'categories':categories,'children':children},
         **kwargs)
 
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):
@@ -125,6 +161,8 @@ def product_and_shop(request, product_id, shop_id, page=0, template_name='fprice
 def summary_list(request, page=0, template_name='fprice/summary_list.html', **kwargs):
     queryset = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=30)).select_related('shop','user')
     summary_sum = queryset.aggregate(Sum('summary'))
+    _shop_counts = Summary.objects.filter(user=request.user).values('shop').annotate(count=Count('shop'))
+    shop_list = Shop.objects.filter(id__in=_shop_ids)
     #month_list = Summary.objects.filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).dates('time','month',order='DESC')
     month_list = Summary.objects.filter(user=request.user).filter(time__gt=datetime.datetime.now()-datetime.timedelta(days=365)).extra(select={'year': connections[Summary.objects.db].ops.date_extract_sql('year', 'time'), 'month': connections[Summary.objects.db].ops.date_extract_sql('month', 'time')}).values('year','month').annotate(sum=Sum('summary')).order_by('-year','-month')
     return list_detail.object_list(
@@ -133,7 +171,7 @@ def summary_list(request, page=0, template_name='fprice/summary_list.html', **kw
         paginate_by = 30,
         page = page,
         template_name = template_name,
-        extra_context = {'sum':summary_sum, 'month_list': month_list},
+        extra_context = {'sum':summary_sum, 'shop_list': shop_list, 'month_list': month_list},
         **kwargs)
 
 @login_required
