@@ -33,14 +33,71 @@ User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 User.get_profile = lambda u: UserProfile.objects.get_or_create(user=u)[0]
 
 
+class ShopCategory(models.Model):
+
+    # Named
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, max_length=50)
+
+    # Content
+    description = models.TextField(blank=True)
+
+    # Orderable
+    position = models.PositiveIntegerField(default=0)
+
+    # Hierarchy
+    parent = models.ForeignKey('self', null=True, blank=True,
+                               related_name='children')
+
+    def __unicode__(self):
+        return u"%s" % (self.title)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('price_shop_category', (self.slug,))
+
+    class Meta:
+        ordering = ["title"]
+
+mptt.register(ShopCategory, order_insertion_by=['title'])
+
+
+class ShopNet(models.Model):
+
+    # Named
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, max_length=50)
+
+    # Content
+    description = models.TextField(blank=True)
+
+    # Orderable
+    position = models.PositiveIntegerField(default=0)
+
+    def __unicode__(self):
+        return u"%s" % (self.title)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('price_shopnet_detail', (self.slug,))
+
+    class Meta:
+        ordering = ["title"]
+
+
 class Shop(models.Model):
 
     # Named
     title = models.CharField(max_length=200)
 
+    # Category
+    category = models.ForeignKey(ShopCategory, null=True, blank=True)
+
     # Core
     city = models.ForeignKey(City, blank=True, null=True)
-
+    net = models.ForeignKey(ShopNet, blank=True, null=True, related_name='net_shops')
+    mall = models.ForeignKey('self', blank=True, null=True, related_name='mall_shops')
+    
     def __unicode__(self):
         return u"%s" % (self.title)
 

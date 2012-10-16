@@ -1,17 +1,15 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Цены в {% if category %}{{ category.title|lower }}{% else %}магазинах{% endif %} | {{ block.super }}{% endblock %}
+{% block title %}Цены в сети магазинов{% if shopnet %} {{ shopnet.title }}{% endif %} | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %}
-{{ block.super }} - {% if category %}<a href="{% url price_shop_list %}">Магазины</a>{% else %}Магазины{% endif %}{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
-{% endfor %}{% if category %} - {{ category }}{% endif %}
-{% endblock %}
+{{ block.super }} - {% if shopnet %}<a href="{% url price_shopnet_list %}">Сети магазинов</a> - {{ shopnet.title }}{% else %}Сети магазинов{% endif %}{% endblock %}
 
 {% block contentclass %}shoplist{% endblock %}
 
 {% block content %}
-<h1>Цены в {% if category %}{{ category.title|lower }}{% else %}магазинах{% endif %}</h1>
+<h1>Цены в сети магазинов{% if shopnet %} {{ shopnet.title }}{% endif %}</h1>
 
 {% if children|length > 0 %}<div id="children">
 {% for ch in children %}<a href="{{ ch.get_absolute_url }}">{{ ch }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}

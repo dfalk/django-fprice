@@ -40,7 +40,7 @@ class FeaturedContentNode(Node):
         self.model = get_model(*model.split('.'))
         
     def render(self, context):
-        context[self.varname] = self.model._default_manager.filter(is_featured=True)[:self.num]
+        context[self.varname] = self.model._default_manager.filter(is_featured=True).order_by('category')[:self.num]
         return ''
 
 def get_featured(parser, token):

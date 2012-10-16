@@ -15,7 +15,7 @@ from django.core import serializers
 import datetime, time
 from decimal import Decimal
 
-from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary, ShopProduct
+from fprice.models import Shop, ProductCategory, Product, Price, Trade, Summary, ShopProduct, ShopCategory, ShopNet
 from fprice.forms import TradeForm, TradeFormSet, TitleForm, PriceFormSet, PriceForm
 
 
@@ -69,12 +69,48 @@ def product_detail(request, product_id, page=0, template_name='fprice/product_de
         **kwargs)
 
 def shop_list(request, page=0, template_name='fprice/shop_list.html', **kwargs):
+    children = ShopCategory.objects.filter(parent__isnull=True)
     return list_detail.object_list(
         request,
         queryset = Shop.objects.all(),
         paginate_by = 30,
         page = page,
         template_name = template_name,
+        extra_context = {'children':children},
+        **kwargs)
+
+def shopnet_list(request, page=0, template_name='fprice/shopnet_list.html', **kwargs):
+    return list_detail.object_list(
+        request,
+        queryset = ShopNet.objects.all(),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        **kwargs)
+
+def shopnet_detail(request, slug, page=0, template_name='fprice/shopnet_list.html', **kwargs):
+    shopnet = ShopNet.objects.get(slug=slug)
+    return list_detail.object_list(
+        request,
+        queryset = Shop.objects.filter(net=shopnet),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'shopnet':shopnet},
+        **kwargs)
+
+def shop_category(request, slug, page=0, template_name='fprice/shop_list.html', **kwargs):
+    category = ShopCategory.objects.get(slug=slug)
+    subcategories = category.get_descendants(include_self=True)
+    categories = category.get_ancestors()
+    children = category.get_children()
+    return list_detail.object_list(
+        request,
+        queryset = Shop.objects.filter(category__in=subcategories),
+        paginate_by = 30,
+        page = page,
+        template_name = template_name,
+        extra_context = {'category':category,'categories':categories,'children':children},
         **kwargs)
 
 def shop_detail(request, shop_id, page=0, template_name='fprice/shop_detail.html', **kwargs):

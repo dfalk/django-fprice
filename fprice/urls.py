@@ -10,7 +10,11 @@ urlpatterns = patterns('fprice.views',
     url(r'^shops/$', view='shop_list', name='price_shop_list'),
     url(r'^shops/(?P<shop_id>\d+)/$', view='shop_detail', name='price_shop_detail'),
     url(r'^shops/(?P<shop_id>\d+)/cat/(?P<cat_slug>\w+)/$', view='shop_detail_category', name='price_shop_detail_category'),
+    url(r'^shops/category/(?P<slug>\w+)/$', view='shop_category', name='price_shop_category'),
     url(r'^shops/(?P<shop_id>\d+)/edit_featured/$', view='shop_edit_featured', name='price_shop_edit_featured'),
+
+    url(r'^shopnets/$', view='shopnet_list', name='price_shopnet_list'),
+    url(r'^shopnets/(?P<slug>\w+)/$', view='shopnet_detail', name='price_shopnet_detail'),
 
     url(r'^products/$', view='product_list', name='price_product_list'),
     url(r'^products/(?P<product_id>\d+)/$', view='product_detail', name='price_product_detail'),
