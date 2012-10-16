@@ -1,7 +1,7 @@
 {% extends "fprice/base_price.html" %}
 {% load comments markup %}
 
-{% block title %}Цены в {% if category %}{{ category.title|lower }}{% else %}магазинах{% endif %} | {{ block.super }}{% endblock %}
+{% block title %}Цены в магазинах{% if category %}: {{ category.title|lower }}{% endif %} | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %}
 {{ block.super }} - {% if category %}<a href="{% url price_shop_list %}">Магазины</a>{% else %}Магазины{% endif %}{% for cate in categories %} - <a href="{{ cate.get_absolute_url }}">{{ cate }}</a>
@@ -11,7 +11,7 @@
 {% block contentclass %}shoplist{% endblock %}
 
 {% block content %}
-<h1>Цены в {% if category %}{{ category.title|lower }}{% else %}магазинах{% endif %}</h1>
+<h1>Цены в  магазинах{% if category %}: {{ category.title|lower }}{% endif %}</h1>
 
 {% if children|length > 0 %}<div id="children">
 {% for ch in children %}<a href="{{ ch.get_absolute_url }}">{{ ch }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
