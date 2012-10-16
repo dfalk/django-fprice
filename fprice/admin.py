@@ -126,6 +126,11 @@ class ShopProductAdmin(admin.ModelAdmin):
         PriceInline,
     ]
 
+class ShopAdmin(admin.ModelAdmin):
+    list_display = ['__unicode__', 'category']
+    list_filter = ('category',)
+    search_fields = ('title',)
+
 class PriceAdmin(admin.ModelAdmin):
     ''' Must be deprecated. '''
     #form = TradeForm
@@ -141,7 +146,7 @@ class PriceAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(City)
-admin.site.register(Shop)
+admin.site.register(Shop, ShopAdmin)
 admin.site.register(ShopNet)
 admin.site.register(ShopCategory)
 admin.site.register(Product, ProductAdmin)
