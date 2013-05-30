@@ -15,7 +15,7 @@
 {% block content %}
 <h1>Цены в магазине {{ shop.title }}</h1>
 
-<p><a href="{% url price_shop_edit_featured shop.id %}">Ввести цены на популярные продукты</a></p>
+{% if request.user.is_staff %}<p><a href="{% url price_shop_edit_featured shop.id %}">Ввести цены на популярные продукты</a></p>{% endif %}
 
 <p>Категории:
 {% for cat in subcategories %}
