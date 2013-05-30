@@ -269,6 +269,7 @@ class Summary(models.Model):
     shop = models.ForeignKey('Shop', blank=True, null=True)
     summary = models.DecimalField(max_digits=19, decimal_places=2)
     currency = models.CharField(max_length=3,choices=CURR_CHOICES,default='rur')
+    description = models.TextField(blank=True)
 
     def __unicode__(self):
         return u"%s %s - %s" % (self.summary, self.currency, self.time)

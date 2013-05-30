@@ -11,6 +11,7 @@
 
 <style>
 th { text-align: left; }
+#id_description { width: 400px; height: 50px; }
 
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
@@ -75,7 +76,12 @@ th { text-align: left; }
         {% endfor %}
         </tbody>
     </table>
+    <div id="description-block" style="float:left;">
+    <b>Описание</b><br />
+    {{ forma.description }}
+    </div>
     <div id="ui_total_block"><b>Общая сумма</b> {{ forma.summary.errors }}{{ forma.summary }}</div>
+    <div style="clear:both;"></div>
     {{ formset.management_form }}
     <br />
     <input type="submit" value="Сохранить" />

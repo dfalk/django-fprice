@@ -16,7 +16,7 @@ class TitleForm(forms.ModelForm):
 
     class Meta:
         model = Summary
-        fields = ('spytrade', 'time', 'shop_visual')
+        fields = ('spytrade', 'time', 'shop_visual', 'description')
 
     def __init__(self, *args, **kwargs):
         super(TitleForm, self).__init__(*args, **kwargs)

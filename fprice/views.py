@@ -271,6 +271,7 @@ def trade_add(request, **kwargs):
                 new_summ.shop = shop
                 new_summ.currency = forma.cleaned_data['currency']
                 new_summ.summary = 0 - forma.cleaned_data['summary']
+                new_summ.description = forma.cleaned_data['description']
                 new_summ.save()
 
             for form in formset.forms:
